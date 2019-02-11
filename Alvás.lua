@@ -6,7 +6,7 @@ function tempSleepFunc()
     local currentDate = os.date("*t");
     local hour = tonumber(string.format("%02d", currentDate.hour));
 
-    if ((hour >= 0) and (hour <= 7)) then
+    if ((hour >= 0) and (hour <= 1)) then
         fibaro:setGlobal("Alvas", "Alvás");
     else
         --fibaro:setGlobal("Alvas", "Ébrenlét");
