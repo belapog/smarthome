@@ -1,13 +1,29 @@
 --[[
 %% properties
-92 secured
+124 secured
 %% weather
 %% events
 %% globals
 --]]
 
-fibaro:debug ('Hazaérkezés elindítva')
-local riasztoKikapcs = (tonumber(fibaro:getValue(92, "secured")) == 0 )
+function debug(message, level)
+    if level == nil then
+        level = 1;
+    end
+    local debugLevel = 2;
+    if (level >= debugLevel) then
+        fibaro:debug (message);
+    end
+end
+
+debug ('Hazaérkezés elindítva')
+
+local secured = (tonumber(fibaro:getValue(124, "secured")) == 0 )
+debug ("secured: " .. tostring(secured));
+
+if secured then
+    fibaro:call(124, "unsecure");
+end
 
 fibaro:call(22, "setArmed", "0");
 fibaro:call(30, "setArmed", "0");
@@ -22,8 +38,5 @@ fibaro:call(105, "setArmed", "0");
 fibaro:call(107, "setArmed", "0");
 fibaro:call(108, "setArmed", "0");
 
-fibaro:call(92, "unsecure");
-
 fibaro:setGlobal("Riaszto", "Ki");
-
-fibaro:debug ('Riaszto kikapcsolva')
+debug ('Riaszto kikapcsolva', 2)

@@ -1,33 +1,48 @@
 --[[
 %% properties
-92 secured
+124 secured
 %% weather
 %% events
 %% globals
 OtthonVannak
 --]]
 
-fibaro:debug ("Távozás otthonról elindítva")
+function debug(message, level)
+    if level == nil then
+        level = 1;
+    end
+    local debugLevel = 2;
+    if (level >= debugLevel) then
+        fibaro:debug (message);
+    end
+end
+
+debug ("Távozás elindítva");
 
 local trigger = fibaro:getSourceTrigger();
 local triggerType = trigger['type'];
+debug ("triggerType: " .. triggerType);
 
-fibaro:debug ("triggerType" .. triggerType);
+local atHome = fibaro:getGlobalValue("OtthonVannak");
+debug ("atHome: " .. atHome, 1);
+    
+local alarmReady = (
+    (tonumber(fibaro:getValue(31, "value")) == 0) and
+    (tonumber(fibaro:getValue(96, "value")) == 0) and  
+    (tonumber(fibaro:getValue(105, "value")) == 0) and  
+    (tonumber(fibaro:getValue(108, "value")) == 0) );
+debug ("alarmReady: " .. tostring(alarmReady));
+    
+local secured = (tonumber(fibaro:getValue(124, "secured")) == 255 );
+debug ("secured: " .. tostring(secured));
 
-local notAtHome = (fibaro:getGlobalValue("OtthonVannak") == "Nem");
-if (notAtHome)
-    fibaro:call(92, "secure");
+if ((triggerType == "global") and (atHome == "Nincsenek") and alarmReady) then
+    fibaro:call(124, "secure");
+    secured = true;
+    debug ("secured");
 end
-
-local riasztoBekapcs = (tonumber(fibaro:getValue(92, "secured")) == 255 )
-
-if (tonumber(fibaro:getValue(31, "value")) > 0 or
-    tonumber(fibaro:getValue(96, "value")) > 0 or  
-    tonumber(fibaro:getValue(105, "value")) > 0 or  
-    tonumber(fibaro:getValue(108, "value")) > 0 ) then
-        fibaro:call(4, "sendDefinedPushNotification", "7");
-        fibaro:debug("Riaszto nem aktiválható, valamelyik ablak nyitva van");
-else   
+    
+if (alarmReady) then
     fibaro:call(22, "setArmed", "1");
     fibaro:call(30, "setArmed", "1");
     fibaro:call(31, "setArmed", "1");
@@ -41,8 +56,15 @@ else
     fibaro:call(57, "setArmed", "1");
     fibaro:call(98, "setArmed", "1");
     
-    fibaro:call(92, "secure");
+    fibaro:call(124, "secure");
     
     fibaro:setGlobal("Riaszto", "Be");
-    fibaro:debug("Riaszto aktiválva");
+    if (atHome ~= "Nincsenek") then
+        fibaro:setGlobal("OtthonVannak", "Nincsenek");
+    end
+    debug("Riaszto aktiválva", 2);
+else
+    fibaro:call(4, "sendDefinedPushNotification", "7");
+    debug("Riaszto nem aktiválható, valamelyik ablak nyitva van");
+    debug("Riaszto nem aktiválható, valamelyik ablak nyitva van", 2);
 end

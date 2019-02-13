@@ -9,24 +9,33 @@
 %% globals
 --]]
 
---fibaro:debug ("AtHomeDetection started");
+function debug(message, level)
+    if level == nil then
+        level = 1;
+    end
+    local debugLevel = 2;
+    if (level >= debugLevel) then
+        fibaro:debug (message);
+    end
+end
 
 function tempAtHomeDetection()
     fibaro:debug ("tempAtHomeDetection started");
     
-    local tempAtHome = fibaro:getGlobalValue("AtHome");
-    if (tempAtHome == "Uncertain") then
-        fibaro:setGlobal("AtHome", "No");
+    local tempAtHome = fibaro:getGlobalValue("OtthonVannak");
+    if (tempAtHome == "Talán") then
+        fibaro:setGlobal("OtthonVannak", "Nincsenek");
     end
 end
 
+debug ("Otthon érzékelés elindítva");
+
 --Actual value
-local actualAtHome = fibaro:getGlobalValue("AtHome");
---fibaro:debug ("actualAtHome: " .. actualAtHome);
+local actualAtHome = fibaro:getGlobalValue("OtthonVannak");
+debug ("actualAtHome: " .. actualAtHome);
 
 --Alarmed
-local alarmed = false;
-if (
+local alarmed = (
     (tonumber(fibaro:getValue(57, "armed")) > 0) or
     (tonumber(fibaro:getValue(31, "armed")) > 0) or 
     (tonumber(fibaro:getValue(98, "armed")) > 0) or 
@@ -34,18 +43,15 @@ if (
     (tonumber(fibaro:getValue(76, "armed")) > 0) or
     (tonumber(fibaro:getValue(96, "armed")) > 0) or
     (tonumber(fibaro:getValue(108, "armed")) > 0)  or
-    (tonumber(fibaro:getValue(105, "armed")) > 0 ))
-then
-    alarmed = true;
-end
---fibaro:debug ("alarmed: " .. tostring(alarmed));
+    (tonumber(fibaro:getValue(105, "armed")) > 0 ));
+debug ("alarmed: " .. tostring(alarmed));
 
 --Trigger
 local trigger = fibaro:getSourceTrigger();
 local triggerDevice;
 if (trigger['type'] == 'property') then
     local triggerDeviceId = trigger['deviceID'];
-    fibaro:debug ("triggerDeviceId: " .. triggerDeviceId);
+    debug ("triggerDeviceId: " .. triggerDeviceId);
     if (triggerDeviceId == 98 or triggerDeviceId == 22 or triggerDeviceId == 76) then
         if (tonumber(fibaro:getValue(triggerDeviceId, "value")) > 0) then
             triggerDevice = "Motion";
@@ -58,33 +64,32 @@ if (trigger['type'] == 'property') then
 else
     triggerDevice = "other";
 end
-fibaro:debug ("triggerDevice: " .. triggerDevice);
+debug ("triggerDevice: " .. triggerDevice);
 
-local newAtHome ="";
+local newAtHome = "";
 if (triggerDevice == "Door") then
     local doorState = tonumber(fibaro:getValue(57, "value"));
-    --fibaro:debug ("doorState: " .. tostring(doorState));
+    debug ("doorState: " .. tostring(doorState));
     
-    if ((actualAtHome == "Yes") and (doorState == 0)) then
+    if ((actualAtHome == "Igen") and (doorState == 0)) then
         if alarmed then
-            newAtHome = "No";
+            newAtHome = "Nincsenek";
         else    
-            newAtHome = "Uncertain";
+            newAtHome = "Talán";
             setTimeout(tempAtHomeDetection, 15*60*1000);
         end
     end
-    if ((actualAtHome ~= "Yes") and (not alarmed) and (doorState > 0)) then
-        newAtHome = "Yes";
+    if ((actualAtHome ~= "Igen") and (not alarmed) and (doorState > 0)) then
+        newAtHome = "Igen";
     end
 end
 
-
-if ((triggerDevice == "Motion") and (actualAtHome == "Uncertain")) then
-    newAtHome = "Yes";
+if ((triggerDevice == "Motion") and (actualAtHome == "Talán")) then
+    newAtHome = "Igen";
 end
 
-fibaro:debug ("newAtHome: " .. newAtHome);
+debug ("newAtHome: " .. newAtHome);
 
 if (newAtHome ~= "") then
-    fibaro:setGlobal("AtHome", newAtHome);
+    fibaro:setGlobal("OtthonVannak", newAtHome);
 end
