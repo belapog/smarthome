@@ -132,13 +132,13 @@ end
 
 if (targetRollerShutterPosition == "Down") then
     fibaro:startScene(51);
-    debug ('Auto down', 2);
+    debug ('Auto down');
     if (not rollerShutterPositionManualDown) then
         fibaro:setGlobal("NapellenzoMozgatas", "Auto le");
     end
 else
     fibaro:startScene(52);
-    debug ('Auto Up!', 2);
+    debug ('Auto Up!');
     if (not rollerShutterPositionManualUp) then
         fibaro:setGlobal("NapellenzoMozgatas", "Auto fel");
     end
