@@ -11,7 +11,7 @@ function debug(message, level)
     if level == nil then
         level = 1;
     end
-    local debugLevel = 2;
+    local debugLevel = 1;
     if (level >= debugLevel) then
         fibaro:debug (message);
     end
@@ -41,8 +41,17 @@ if ((triggerType == "global") and (atHome == "Nincsenek") and alarmReady) then
     secured = true;
     debug ("secured");
 end
+
+if ((triggerType ~= "global") and (atHome ~= "Nincsenek") and alarmReady) then
+    fibaro:setGlobal("OtthonVannak", "Nincsenek");
+    atHome = "Nincsenek";
+    fibaro:call(124, "secure");
+    secured = true;
+    debug ("secured");
+    debug ("OtthonVannak set to Nincsenek");
+end
     
-if (alarmReady) then
+if (alarmReady and secured) then
     fibaro:call(22, "setArmed", "1");
     fibaro:call(30, "setArmed", "1");
     fibaro:call(31, "setArmed", "1");
@@ -59,11 +68,14 @@ if (alarmReady) then
     fibaro:call(124, "secure");
     
     fibaro:setGlobal("Riaszto", "Be");
+    
     if (atHome ~= "Nincsenek") then
         fibaro:setGlobal("OtthonVannak", "Nincsenek");
     end
     debug("Riaszto aktiválva", 2);
-else
+end
+
+if (not alarmReady and secured) then 
     fibaro:call(4, "sendDefinedPushNotification", "7");
     debug("Riaszto nem aktiválható, valamelyik ablak nyitva van");
     debug("Riaszto nem aktiválható, valamelyik ablak nyitva van", 2);
