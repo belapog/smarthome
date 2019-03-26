@@ -5,14 +5,22 @@
 %% globals
 --]]
 
+function debug(message, level)
+    if level == nil then
+        level = 1;
+    end
+    local debugLevel = 2;
+    if (level >= debugLevel) then
+        fibaro:debug (message);
+    end
+end
 
 local napellenzokLeeresztve = (tonumber(fibaro:getValue(13, "value")) == 0  or  
     tonumber(fibaro:getValue(10, "value")) == 0  or  
     tonumber(fibaro:getValue(16, "value")) == 0  or  
     tonumber(fibaro:getValue(19, "value")) == 0
     )
-
-fibaro:debug (napellenzokLeeresztve);
+debug ("napellenzokLeeresztve" .. tostring(napellenzokLeeresztve));
 
 if (napellenzokLeeresztve)
 then
@@ -20,7 +28,7 @@ then
     fibaro:call(10, "open");
     fibaro:call(16, "open");
     fibaro:call(19, "open");
-    fibaro:debug ('Napellenzők felhúzás');
+    debug ('Napellenzők felhúzás');
 else
-    fibaro:debug ('Napellenzők fent voltak');
+    debug ('Napellenzők fent voltak');
 end

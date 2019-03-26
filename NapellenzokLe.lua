@@ -5,28 +5,34 @@
 %% globals
 --]]
 
+function debug(message, level)
+    if level == nil then
+        level = 1;
+    end
+    local debugLevel = 2;
+    if (level >= debugLevel) then
+        fibaro:debug (message);
+    end
+end
+
 local napellenzokFent = (tonumber(fibaro:getValue(13, "value")) > 0  or  
     tonumber(fibaro:getValue(10, "value")) > 0  or  
     tonumber(fibaro:getValue(16, "value")) > 0  or  
     tonumber(fibaro:getValue(19, "value")) > 0
     )
+debug ("napellenzokFent: " .. tostring(napellenzokFent));
 
-fibaro:debug (napellenzokFent);
+local weatherGoodCondition = (tonumber(api.get('/weather')['Wind']) < tonumber(18));
+debug ("weatherGoodCondition: " .. tostring(weatherGoodCondition));
 
-if (
-    napellenzokFent)
+
+if (napellenzokFent and weatherGoodCondition)
 then
-    if (
-        tonumber(api.get('/weather')['Wind']) < tonumber(20))
-    then
-        fibaro:call(13, "close");
-	      fibaro:call(10, "close");
-        fibaro:call(16, "close");
-        fibaro:call(19, "close");
-        fibaro:debug ('Napellenző leeresztés');
-    else
-        fibaro:debug ('Szélvédelem');
-    end
+    fibaro:call(13, "close");
+    fibaro:call(10, "close");
+    fibaro:call(16, "close");
+    fibaro:call(19, "close");
+    debug ('Napellenző leeresztés');
 else
-    fibaro:debug ('Napellenzők mind lent');
+    debug ('Napellenzők mind lent vagy szél van', 2 );
 end
