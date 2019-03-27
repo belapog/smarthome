@@ -33,7 +33,7 @@ local weatherMostlyCloudy = api.get('/weather')['WeatherCondition']:lower() == "
     or api.get('/weather')['WeatherCondition']:lower() == "partly cloudy";
 local weatherClear = api.get('/weather')['WeatherCondition']:lower() == "clear" 
     or api.get('/weather')['WeatherCondition']:lower() == "sunny";
-local weatherWindy = tonumber(api.get('/weather')['Wind']) >= tonumber(18);
+local weatherWindy = tonumber(api.get('/weather')['Wind']) >= tonumber(22);
 local weatherGoodCondition = (not weatherWindy and not weatherCloudy and (weatherClear or weatherMostlyCloudy));
 debug ("WeatherCondition: " .. api.get('/weather')['WeatherCondition']:lower());
 debug ("Wind: " .. api.get('/weather')['Wind']);
