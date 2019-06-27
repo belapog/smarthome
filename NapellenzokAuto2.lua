@@ -18,7 +18,7 @@ function debug(message, level)
     if level == nil then
         level = 1;
     end
-    local debugLevel = 2;
+    local debugLevel = 1;
     if (level >= debugLevel) then
         fibaro:debug (message);
     end
@@ -26,15 +26,18 @@ end
 
 local targetRollerShutterPosition = "";
 
---Weather
+--AtHome detection
+local weAreAtHome = (fibaro:getGlobalValue("OtthonVannak") == "Igen");
+debug ("weAreAtHome: " .. tostring(weAreAtHome));
 
+--Weather
 local weatherCloudy = api.get('/weather')['WeatherCondition']:lower() == "cloudy";
 local weatherMostlyCloudy = api.get('/weather')['WeatherCondition']:lower() == "mostly cloudy"
     or api.get('/weather')['WeatherCondition']:lower() == "partly cloudy";
 local weatherClear = api.get('/weather')['WeatherCondition']:lower() == "clear" 
     or api.get('/weather')['WeatherCondition']:lower() == "sunny";
 local weatherWindy = tonumber(api.get('/weather')['Wind']) >= tonumber(22);
-local weatherGoodCondition = (not weatherWindy and not weatherCloudy and (weatherClear or weatherMostlyCloudy));
+
 debug ("WeatherCondition: " .. api.get('/weather')['WeatherCondition']:lower());
 debug ("Wind: " .. api.get('/weather')['Wind']);
 debug ("weatherGoodCondition: " .. tostring(weatherGoodCondition));
@@ -42,6 +45,14 @@ debug ("weatherCloudy: " .. tostring(weatherCloudy));
 debug ("weatherMostlyCloudy: " .. tostring(weatherMostlyCloudy));
 debug ("weatherClear: " .. tostring(weatherClear));
 debug ("weatherWindy: " .. tostring(weatherWindy));
+
+local weatherGoodCondition = False;
+if weAreAtHome then
+    weatherGoodCondition = (not weatherWindy);
+else
+    weatherGoodCondition = (not weatherWindy and not weatherCloudy and (weatherClear or weatherMostlyCloudy));
+end
+    
 
 --Climate
 local isCooling = (fibaro:getGlobalValue("Futes") == "Hűtés");
@@ -71,12 +82,10 @@ debug ("rollerShutterPositionManualDown: " .. tostring(rollerShutterPositionManu
 
 local dayLight = fibaro:getGlobalValue("Napszak");
 local sleepMode = fibaro:getGlobalValue("Alvas");
-local weAreAtHome = (fibaro:getGlobalValue("Riaszto") == "Ki");
 local needEveningShade = ((dayLight == "Este") and (sleepMode == "Ébrenlét") and weAreAtHome);
 local needLateNightMode = ((dayLight == "Este") and (sleepMode == "Alvás"));
 debug ("dayLight: " .. tostring(dayLight));
 debug ("sleepMode: " .. tostring(sleepMode));
-debug ("weAreAtHome: " .. tostring(weAreAtHome));
 debug ("needEveningShade: " .. tostring(needEveningShade));
 debug ("needLateNightMode: " .. tostring(needLateNightMode));
 
