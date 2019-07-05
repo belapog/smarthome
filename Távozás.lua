@@ -25,6 +25,9 @@ debug ("triggerType: " .. triggerType);
 
 local atHome = fibaro:getGlobalValue("OtthonVannak");
 debug ("atHome: " .. atHome, 1);
+
+local autoRiaszto = fibaro:getGlobalValue("AutoRiaszto");
+debug ("autoRiaszto: " .. autoRiaszto, 1);
     
 local alarmReady = (
     (tonumber(fibaro:getValue(31, "value")) == 0) and
@@ -36,10 +39,11 @@ debug ("alarmReady: " .. tostring(alarmReady));
 local secured = (tonumber(fibaro:getValue(124, "secured")) == 255 );
 debug ("secured: " .. tostring(secured));
 
-if ((triggerType == "global") and (atHome == "Nincsenek") and alarmReady) then
+--Automata riasztás
+if ((triggerType == "global") and (atHome == "Nincsenek") and alarmReady and (autoRiaszto == "Igen")) then
     fibaro:call(124, "secure");
     secured = true;
-    debug ("secured");
+    debug ("Automata riasztás bekapcsolása");
 end
 
 if ((triggerType ~= "global") and (atHome ~= "Nincsenek") and alarmReady) then
@@ -78,5 +82,4 @@ end
 if (not alarmReady and secured) then 
     fibaro:call(4, "sendDefinedPushNotification", "7");
     debug("Riaszto nem aktiválható, valamelyik ablak nyitva van");
-    debug("Riaszto nem aktiválható, valamelyik ablak nyitva van", 2);
 end

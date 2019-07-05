@@ -46,7 +46,16 @@ local alarmed = (
     (tonumber(fibaro:getValue(105, "armed")) > 0 ));
 debug ("alarmed: " .. tostring(alarmed));
 
---Trigger
+--Nincs-e nyitva valami
+local alarmReady = (
+    (tonumber(fibaro:getValue(31, "value")) == 0) and
+    (tonumber(fibaro:getValue(96, "value")) == 0) and  
+    (tonumber(fibaro:getValue(105, "value")) == 0) and  
+    (tonumber(fibaro:getValue(108, "value")) == 0) );
+debug ("alarmReady: " .. tostring(alarmReady));
+
+
+--Mi triggerelte az eseményt /ajtó vagy mozgás érzékelő/
 local trigger = fibaro:getSourceTrigger();
 local triggerDevice;
 if (trigger['type'] == 'property') then
@@ -78,6 +87,11 @@ if (triggerDevice == "Door") then
             newAtHome = "Talán";
             setTimeout(tempAtHomeDetection, 15*60*1000);
         end
+        --Ha ablak vagy ajtó nyitva akkor üzenet
+        if (not alarmReady) then
+            fibaro:call(4, "sendDefinedPushNotification", "7");
+            debug("Valamelyik ablak nyitva van");
+        end if   
     end
     if ((actualAtHome ~= "Igen") and (not alarmed) and (doorState > 0)) then
         newAtHome = "Igen";
