@@ -12,6 +12,10 @@ function tempDailyCleanUpFunc()
         fibaro:setGlobal("StatMaxTempDate", "");
         fibaro:setGlobal("StatMinTempDate", "");
         fibaro:setGlobal("NapellenzoMozgatas", "Auto fel");
+				fibaro:setGlobal("StatDailyMaxHum", "0");
+				fibaro:setGlobal("StatDailyMinHum", "0");
+		    fibaro:setGlobal("StatMaxHumDate", "");
+        fibaro:setGlobal("StatMinHumDate", "");
     end
     
     setTimeout(tempDailyCleanUpFunc, 60*1000)
