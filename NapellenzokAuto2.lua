@@ -3,6 +3,7 @@
 67 value
 66 value
 24 value
+158 value
 %% weather
 Temperature
 Wind
@@ -12,6 +13,8 @@ WeatherCondition
 Napszak
 Alvas
 Futes
+TooWindyTime
+OtthonVannak
 --]]
 
 function debug(message, level)
@@ -31,27 +34,20 @@ local weAreAtHome = (fibaro:getGlobalValue("OtthonVannak") == "Igen");
 debug ("weAreAtHome: " .. tostring(weAreAtHome));
 
 --Weather
-local weatherCloudy = api.get('/weather')['WeatherCondition']:lower() == "cloudy";
-local weatherMostlyCloudy = api.get('/weather')['WeatherCondition']:lower() == "mostly cloudy"
-    or api.get('/weather')['WeatherCondition']:lower() == "partly cloudy";
-local weatherClear = api.get('/weather')['WeatherCondition']:lower() == "clear" 
-    or api.get('/weather')['WeatherCondition']:lower() == "sunny";
-local weatherWindy = tonumber(api.get('/weather')['Wind']) >= tonumber(22);
+local wind = tonumber(fibaro:getValue(158, "value"));
+local tooWindy = fibaro:getGlobalValue("TooWindyTime");
+local timeTakenLastTooWindy = tonumber(os.difftime(os.time(), tooWindy));
 
+local weatherWindy = ((timeTakenLastTooWindy <= (60 * 15)) or (wind >= 6)); -- szeles az idő ha az elmúlt negyd órában volt nagy széllőkés
+local weatherCloudy = api.get('/weather')['WeatherCondition']:lower() == "cloudy";
+
+debug ("Wind: " .. tostring(wind));
+debug ("timeTakenLastTooWindy: " .. tostring(timeTakenLastTooWindy));
 debug ("WeatherCondition: " .. api.get('/weather')['WeatherCondition']:lower());
-debug ("Wind: " .. api.get('/weather')['Wind']);
-debug ("weatherGoodCondition: " .. tostring(weatherGoodCondition));
-debug ("weatherCloudy: " .. tostring(weatherCloudy));
-debug ("weatherMostlyCloudy: " .. tostring(weatherMostlyCloudy));
-debug ("weatherClear: " .. tostring(weatherClear));
 debug ("weatherWindy: " .. tostring(weatherWindy));
 
-local weatherGoodCondition = False;
-if weAreAtHome then
-    weatherGoodCondition = (not weatherWindy);
-else
-    weatherGoodCondition = (not weatherWindy and not weatherCloudy and (weatherClear or weatherMostlyCloudy));
-end
+local weatherGoodCondition = (not weatherWindy and not weatherCloudy);
+debug ("weatherGoodCondition: " .. tostring(weatherGoodCondition));
     
 
 --Climate
