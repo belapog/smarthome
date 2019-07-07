@@ -4,6 +4,8 @@
 98 value
 22 value
 76 value
+142 value
+148 value
 %% weather
 %% events
 %% globals
@@ -42,9 +44,12 @@ local alarmed = (
     (tonumber(fibaro:getValue(22, "armed")) > 0) or
     (tonumber(fibaro:getValue(76, "armed")) > 0) or
     (tonumber(fibaro:getValue(96, "armed")) > 0) or
-    (tonumber(fibaro:getValue(108, "armed")) > 0)  or
-    (tonumber(fibaro:getValue(105, "armed")) > 0 ));
+    (tonumber(fibaro:getValue(108, "armed")) > 0) or
+    (tonumber(fibaro:getValue(142, "armed")) > 0) or
+    (tonumber(fibaro:getValue(148, "armed")) > 0) or
+		(tonumber(fibaro:getValue(105, "armed")) > 0 ));
 debug ("alarmed: " .. tostring(alarmed));
+
 
 --Nincs-e nyitva valami
 local alarmReady = (
@@ -91,7 +96,7 @@ if (triggerDevice == "Door") then
         if (not alarmReady) then
             fibaro:call(4, "sendDefinedPushNotification", "7");
             debug("Valamelyik ablak nyitva van");
-        end if   
+        end
     end
     if ((actualAtHome ~= "Igen") and (not alarmed) and (doorState > 0)) then
         newAtHome = "Igen";

@@ -4,13 +4,14 @@
 %% events
 %% globals
 Napszak
+Alvas
 --]]
 
 function debug(message, level)
     if level == nil then
         level = 1;
     end
-    local debugLevel = 2;
+    local debugLevel = 1;
     if (level >= debugLevel) then
         fibaro:debug (message);
     end
@@ -28,20 +29,35 @@ debug ("bedroomRollerShutterPositionDown: " .. tostring(bedroomRollerShutterPosi
 debug ("smallRoomRollerShutterPositionDown: " .. tostring(smallRoomRollerShutterPositionDown));
 debug ("livingRoomRollerShutterPositionDown: " .. tostring(livingRoomRollerShutterPositionDown));
 
-if (night and
-    not bedroomRollerShutterPositionDown)
+local ebrenlet = fibaro:getGlobalValue("Alvas") ==  "Ébrenlét";
+debug ("ebrenlet: " .. tostring(ebrenlet));
+
+if (night and not bedroomRollerShutterPositionDown)
 then
 	fibaro:call(115, "close");
 end
 
-if (night and
-    not smallRoomRollerShutterPositionDown)
+if (ebrenlet and not night)
+then
+	fibaro:call(115, "open");
+end
+
+if (night and not smallRoomRollerShutterPositionDown)
 then
 	fibaro:call(121, "close");
 end
 
-if (night and
-    not livingRoomRollerShutterPositionDown)
+if (ebrenlet and not night)
+then
+	fibaro:call(121, "open");
+end
+
+if (night and not livingRoomRollerShutterPositionDown)
 then
 	fibaro:call(129, "close");
+end
+
+if (ebrenlet and not night)
+then
+	fibaro:call(129, "open");
 end
