@@ -8,6 +8,8 @@
 96 value
 108 value
 105 value
+142 value
+148 value
 57 armed
 31 armed
 98 armed
@@ -16,6 +18,8 @@
 96 armed
 108 armed
 105 armed
+142 armed
+148 armed
 %% weather
 %% events
 %% globals
@@ -37,7 +41,9 @@ if (
     (tonumber(fibaro:getValue(22, "value")) > 0 and tonumber(fibaro:getValue(22, "armed")) > 0) or
     (tonumber(fibaro:getValue(76, "value")) > 0 and tonumber(fibaro:getValue(76, "armed")) > 0) or
     (tonumber(fibaro:getValue(96, "value")) > 0 and tonumber(fibaro:getValue(96, "armed")) > 0) or
-    (tonumber(fibaro:getValue(108, "value")) > 0 and tonumber(fibaro:getValue(108, "armed")) > 0) or 
+    (tonumber(fibaro:getValue(108, "value")) > 0 and tonumber(fibaro:getValue(108, "armed")) > 0) or
+    (tonumber(fibaro:getValue(142, "value")) > 0 and tonumber(fibaro:getValue(142, "armed")) > 0) or 
+    (tonumber(fibaro:getValue(148, "value")) > 0 and tonumber(fibaro:getValue(148, "armed")) > 0) or 
     (tonumber(fibaro:getValue(105, "value")) > 0 and tonumber(fibaro:getValue(105, "armed")) > 0)
 )
 then

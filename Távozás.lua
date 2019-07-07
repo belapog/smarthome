@@ -11,7 +11,7 @@ function debug(message, level)
     if level == nil then
         level = 1;
     end
-    local debugLevel = 1;
+    local debugLevel = 2;
     if (level >= debugLevel) then
         fibaro:debug (message);
     end
@@ -68,6 +68,8 @@ if (alarmReady and secured) then
     fibaro:call(108, "setArmed", "1");
     fibaro:call(57, "setArmed", "1");
     fibaro:call(98, "setArmed", "1");
+    fibaro:call(142, "setArmed", "1");
+    fibaro:call(148, "setArmed", "1");
     
     fibaro:call(124, "secure");
     
