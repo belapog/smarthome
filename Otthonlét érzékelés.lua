@@ -66,7 +66,7 @@ local triggerDevice;
 if (trigger['type'] == 'property') then
     local triggerDeviceId = trigger['deviceID'];
     debug ("triggerDeviceId: " .. triggerDeviceId);
-    if (triggerDeviceId == 98 or triggerDeviceId == 22 or triggerDeviceId == 76) then
+    if (triggerDeviceId == 98 or triggerDeviceId == 22 or triggerDeviceId == 76  or triggerDeviceId == 142  or triggerDeviceId == 148) then
         if (tonumber(fibaro:getValue(triggerDeviceId, "value")) > 0) then
             triggerDevice = "Motion";
         else
