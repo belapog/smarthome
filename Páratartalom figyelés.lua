@@ -21,7 +21,7 @@ debug("Páratartalom figyelés strated");
 local paratartalom = tonumber(fibaro:getValue(140, "value"));
 debug ("páratartalom: " .. tostring(paratartalom));
 
-if ((paratartalom > 60 ))
+if ((paratartalom > 70 ))
 then
 		debug("Nagy a páratartalom!", 2);
 		fibaro:call(4, "sendDefinedPushNotification", "10");
