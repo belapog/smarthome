@@ -23,6 +23,8 @@ debug("value" .. tostring(fibaro:getValue(76, "value")));
 local currentDate = os.time();
 debug (tostring(currentDate));
 
+local timer = 40;
+
 if ((tonumber(fibaro:getValue(76, "value")) > 0) and (tonumber(fibaro:getValue(76, "armed")) == 0)) then
     fibaro:setGlobal("SwitchOn164",  tostring(currentDate));
     fibaro:call(164, "turnOn");
@@ -31,8 +33,8 @@ if ((tonumber(fibaro:getValue(76, "value")) > 0) and (tonumber(fibaro:getValue(7
         local lastSwithOnDate = fibaro:getGlobalValue("SwitchOn164");
         local timeTakenLastSwitchOnDate = tonumber(os.difftime(os.time(), lastSwithOnDate));
         debug("timeTakenLastSwitchOnDate: " .. tostring(timeTakenLastSwitchOnDate));
-        if (timeTakenLastSwitchOnDate >= 20) then
+        if (timeTakenLastSwitchOnDate >= timer) then
             fibaro:call(164, "turnOff");
         end
-    end, 20000)
+    end, timer * 1000)
 end
