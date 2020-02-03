@@ -4,9 +4,15 @@
 
 function tempDailyCleanUpFunc()
     local currentDate = os.date("*t");
-    
+            
     if (string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) == "00:00")
     then
+
+      local minTem = fibaro:getGlobal("StatDailyMaxTemp2");
+      local maxTemp = fibaro:getGlobal("StatDailyMinTemp2");
+      local avgTemp = (maxTemp + minTem)/2;
+      fibaro:setGlobal("StatAvgTemp2", avgTemp);
+        
 			fibaro:setGlobal("StatDailyMaxTemp", "0");
 			fibaro:setGlobal("StatDailyMinTemp", "0");
 			fibaro:setGlobal("StatMaxTempDate", "");
@@ -20,6 +26,7 @@ function tempDailyCleanUpFunc()
 			fibaro:setGlobal("StatDailyMinHum", "0");
 			fibaro:setGlobal("StatMaxHumDate", "");
 			fibaro:setGlobal("StatMinHumDate", "");
+      
     end
     
     setTimeout(tempDailyCleanUpFunc, 60*1000)
