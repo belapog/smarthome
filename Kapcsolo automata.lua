@@ -23,7 +23,7 @@ debug("value" .. tostring(fibaro:getValue(76, "value")));
 local currentDate = os.time();
 debug (tostring(currentDate));
 
-local timer = 40;
+local timer = 50;
 
 if ((tonumber(fibaro:getValue(76, "value")) > 0) and (tonumber(fibaro:getValue(76, "armed")) == 0)) then
     fibaro:setGlobal("SwitchOn164",  tostring(currentDate));
