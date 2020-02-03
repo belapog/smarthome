@@ -2,6 +2,16 @@
 %% autostart
 --]]
 
+function debug(message, level)
+    if level == nil then
+        level = 1;
+    end
+    local debugLevel = 2;
+    if (level >= debugLevel) then
+        fibaro:debug (message);
+    end
+end
+
 function tempSunSetSunRiseFunc()
     local sunriseTime = fibaro:getValue(1, "sunriseHour");
     local sunriseHour = tonumber(string.sub(sunriseTime,1,2));
@@ -18,9 +28,9 @@ function tempSunSetSunRiseFunc()
     local currentMin = currentDate.min;
     local current = currentHour * 60 + currentMin;
 
-    --fibaro:debug("sunrise: " .. sunrise);
-    --fibaro:debug("sunset: " .. sunset);
-    --fibaro:debug("current: " .. current);
+    debug("sunrise: " .. sunrise);
+    debug("sunset: " .. sunset);
+    debug("current: " .. current);
 
     if ((current >= sunrise) and (current <= sunset)) then
         fibaro:setGlobal("Napszak", "Nappal");
