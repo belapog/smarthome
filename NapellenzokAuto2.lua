@@ -87,8 +87,7 @@ debug ("needLateNightMode: " .. tostring(needLateNightMode));
 
 --sun
 local light = tonumber(fibaro:getValue(24, "value"));
-local sunnyDay = weatherClear and 
-    (((rollerShutterPositionDown == true) and (light > 200 )) or
+local sunnyDay = (((rollerShutterPositionDown == true) and (light > 200 )) or
     ((rollerShutterPositionDown == false) and (light > 1000 )));
 debug ("sunnyDay: " .. tostring(sunnyDay));
 debug ("light: " .. tostring(light));

@@ -27,7 +27,7 @@ then
 		fibaro:call(4, "sendDefinedPushNotification", "10");
 end
 
-if (( paratartalom < 40 ))
+if (( paratartalom < 30 ))
 then
 		debug("Alacsony a páratartalom!", 2);
 		fibaro:call(4, "sendDefinedPushNotification", "11");
@@ -45,11 +45,11 @@ local currenthour = string.format("%02d", currentDate.hour) .. ":" .. string.for
 if ((paratartalom > maxHumNum) or (maxHumNum == 0)) then
   fibaro:setGlobal("StatDailyMaxHum", paratartalom);
   fibaro:setGlobal("StatMaxHumDate", currenthour);
-  fibaro:debug ("MaxHum set: " .. tostring(paratartalom));
+  debug ("MaxHum set: " .. tostring(paratartalom));
 end
 
 if ((paratartalom < minHumNum) or (minHumNum == 0)) then
   fibaro:setGlobal("StatDailyMinHum", paratartalom);
   fibaro:setGlobal("StatMinHumDate", currenthour);
-  fibaro:debug ("MinHum set: " .. tostring(paratartalom));
+  debug ("MinHum set: " .. tostring(paratartalom));
 end

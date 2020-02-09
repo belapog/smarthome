@@ -5,38 +5,60 @@
 %% globals
 Napszak
 Alvas
+%% autostart
 --]]
-
 
 function debug(message, level)
     if level == nil then
         level = 1;
     end
-    local debugLevel = 1;
+    local debugLevel = 2;
     if (level >= debugLevel) then
         fibaro:debug (message);
     end
 end
 
+function ScheduledFunc()
+    -- este 10 után kikapcs
+    local currentDate = os.date("*t");
+    local hour = tonumber(string.format("%02d", currentDate.hour));
+
+    if ( hour >= 22 ) then
+        fibaro:call(173, "turnOff");
+    end
+
+    setTimeout(ScheduledFunc, 60*1000)
+end
+
 debug("Virágkeltető világítás automata");
 
-local night = (fibaro:getGlobalValue("Napszak") == "Este");
-debug ("Napszak: " .. tostring(night));
+local sourceTrigger = fibaro:getSourceTrigger();
 
-local ebrenlet = fibaro:getGlobalValue("Alvas") ==  "Ébrenlét";
-debug ("ebrenlet: " .. tostring(ebrenlet));
+if (sourceTrigger["type"] == "autostart") then
+    ScheduledFunc()
+else
 
-if (night and ebrenlet)
-then
-	fibaro:call(173, "turnOn");
-end
+    local night = (fibaro:getGlobalValue("Napszak") == "Este");
+    debug ("Napszak: " .. tostring(night));
 
-if (night and not ebrenlet)
-then
-	fibaro:call(173, "turnOff");
-end
+    local ebrenlet = fibaro:getGlobalValue("Alvas") ==  "Ébrenlét";
+    debug ("ebrenlet: " .. tostring(ebrenlet));
 
-if (not night)
-then
-	fibaro:call(173, "turnOff");
+    local currentDate = os.date("*t");
+    local hour = tonumber(string.format("%02d", currentDate.hour));
+
+    if (night and ebrenlet and (hour < 22)) then
+        fibaro:call(173, "turnOn");
+        debug ("turnOn");
+    end
+
+    if (night and not ebrenlet) then
+        fibaro:call(173, "turnOff");
+        debug ("turnOff 1");
+    end
+
+    if (not night) then
+        fibaro:call(173, "turnOff");
+        debug ("turnOff 2");
+    end
 end
