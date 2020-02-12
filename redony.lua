@@ -29,7 +29,7 @@ debug ("bedroomRollerShutterPositionDown: " .. tostring(bedroomRollerShutterPosi
 debug ("smallRoomRollerShutterPositionDown: " .. tostring(smallRoomRollerShutterPositionDown));
 debug ("livingRoomRollerShutterPositionDown: " .. tostring(livingRoomRollerShutterPositionDown));
 
-local ebrenlet = fibaro:getGlobalValue("Alvas") ==  "Ébrenlét";
+local ebrenlet = (fibaro:getGlobalValue("Alvas") ==  "Ébrenlét");
 debug ("ebrenlet: " .. tostring(ebrenlet));
 
 if (night and not bedroomRollerShutterPositionDown)

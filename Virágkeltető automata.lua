@@ -18,7 +18,7 @@ function debug(message, level)
     end
 end
 
-function ScheduledFunc()
+function ScheduledFuncFlowLamp()
     -- este 10 után kikapcs
     local currentDate = os.date("*t");
     local hour = tonumber(string.format("%02d", currentDate.hour));
@@ -27,7 +27,7 @@ function ScheduledFunc()
         fibaro:call(173, "turnOff");
     end
 
-    setTimeout(ScheduledFunc, 60*1000)
+    setTimeout(ScheduledFuncFlowLamp, 60*1000)
 end
 
 debug("Virágkeltető világítás automata");
@@ -35,13 +35,13 @@ debug("Virágkeltető világítás automata");
 local sourceTrigger = fibaro:getSourceTrigger();
 
 if (sourceTrigger["type"] == "autostart") then
-    ScheduledFunc()
+    ScheduledFuncFlowLamp()
 else
 
     local night = (fibaro:getGlobalValue("Napszak") == "Este");
     debug ("Napszak: " .. tostring(night));
 
-    local ebrenlet = fibaro:getGlobalValue("Alvas") ==  "Ébrenlét";
+    local ebrenlet = (fibaro:getGlobalValue("Alvas") ==  "Ébrenlét");
     debug ("ebrenlet: " .. tostring(ebrenlet));
 
     local currentDate = os.date("*t");

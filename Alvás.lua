@@ -14,7 +14,7 @@ end
 
 debug ("Alvás elindult");
 
-function ScheduledFunc()    
+function ScheduledFuncSleep()    
     local currentDate = os.date("*t");
     local hour = tonumber(string.format("%02d", currentDate.hour));
     debug ("TempSleepFunc");
@@ -24,11 +24,11 @@ function ScheduledFunc()
         debug ("Alvás");
     end
 
-    setTimeout(ScheduledFunc, 60*1000)
+    setTimeout(ScheduledFuncSleep, 60*1000)
 end
 
 if (sourceTrigger["type"] == "autostart") then
-    ScheduledFunc();
+    ScheduledFuncSleep();
 else
     fibaro:setGlobal("Alvas", "Alvás");
     debug ("Alvás");

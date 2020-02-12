@@ -10,7 +10,7 @@ function debug(message, level)
     if level == nil then
         level = 1;
     end
-    local debugLevel = 2;
+    local debugLevel = 1;
     if (level >= debugLevel) then
         fibaro:debug (message);
     end
@@ -21,7 +21,6 @@ debug ("Ébredés érzékelés aktiválva");
 local trigger = fibaro:getSourceTrigger();
 local triggerSceneActivationID;
 
---local sceneActivation = tonumber(fibaro:getValue(115, "sceneActivation"));
 if trigger["type"] == "other" then
     debug ("manual");
     fibaro:setGlobal("Alvas", "Ébrenlét");
