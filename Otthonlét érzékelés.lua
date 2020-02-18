@@ -15,14 +15,14 @@ function debug(message, level)
     if level == nil then
         level = 1;
     end
-    local debugLevel = 2;
+    local debugLevel = 1;
     if (level >= debugLevel) then
         fibaro:debug (message);
     end
 end
 
-function tempAtHomeDetection()
-    fibaro:debug ("tempAtHomeDetection started");
+function AtHomeDetection()
+    debug ("tempAtHomeDetection started");
     
     local tempAtHome = fibaro:getGlobalValue("OtthonVannak");
     if (tempAtHome == "Talán") then
@@ -62,26 +62,22 @@ debug ("alarmReady: " .. tostring(alarmReady));
 
 --Mi triggerelte az eseményt /ajtó vagy mozgás érzékelő/
 local trigger = fibaro:getSourceTrigger();
-local triggerDevice;
+local triggerDeviceType;
 if (trigger['type'] == 'property') then
     local triggerDeviceId = trigger['deviceID'];
     debug ("triggerDeviceId: " .. triggerDeviceId);
     if (triggerDeviceId == 98 or triggerDeviceId == 22 or triggerDeviceId == 76  or triggerDeviceId == 142  or triggerDeviceId == 148) then
-        if (tonumber(fibaro:getValue(triggerDeviceId, "value")) > 0) then
-            triggerDevice = "Motion";
-        else
-            triggerDevice = "other motion";
-        end
+        triggerDeviceType = "Motion";
     else
-        triggerDevice = "Door";
+        triggerDeviceType = "Door";
     end
 else
-    triggerDevice = "other";
+    triggerDeviceType = "other";
 end
-debug ("triggerDevice: " .. triggerDevice);
+debug ("triggerDeviceType: " .. triggerDeviceType);
 
 local newAtHome = "";
-if (triggerDevice == "Door") then
+if (triggerDeviceType == "Door") then
     local doorState = tonumber(fibaro:getValue(57, "value"));
     debug ("doorState: " .. tostring(doorState));
     
@@ -90,7 +86,7 @@ if (triggerDevice == "Door") then
             newAtHome = "Nincsenek";
         else    
             newAtHome = "Talán";
-            setTimeout(tempAtHomeDetection, 15*60*1000);
+            setTimeout(AtHomeDetection, 15*60*1000);
         end
         --Ha ablak vagy ajtó nyitva akkor üzenet
         if (not alarmReady) then
@@ -103,7 +99,12 @@ if (triggerDevice == "Door") then
     end
 end
 
-if ((triggerDevice == "Motion") and (actualAtHome == "Talán")) then
+if ((triggerDeviceType == "Motion") and (actualAtHome == "Talán")) then
+    newAtHome = "Igen";
+end
+
+--ez nem egy vaószínű eset, csak ha az ajtó érzékelő nem működik jól
+if ((triggerDeviceType == "Motion") and (actualAtHome == "Nincsenek") and (not alarmed)) then
     newAtHome = "Igen";
 end
 
