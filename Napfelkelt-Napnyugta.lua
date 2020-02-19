@@ -12,7 +12,7 @@ function debug(message, level)
     end
 end
 
-function tempSunSetSunRiseFunc()
+function SunSetSunRiseFunc()
     local sunriseTime = fibaro:getValue(1, "sunriseHour");
     local sunriseHour = tonumber(string.sub(sunriseTime,1,2));
     local sunriseMin = tonumber(string.sub(sunriseTime,4, 6));
@@ -38,7 +38,7 @@ function tempSunSetSunRiseFunc()
         fibaro:setGlobal("Napszak", "Este");
     end
 
-    setTimeout(tempSunSetSunRiseFunc, 60*1000);
+    setTimeout(SunSetSunRiseFunc, 60*1000);
 end
 
-tempSunSetSunRiseFunc();
+SunSetSunRiseFunc();

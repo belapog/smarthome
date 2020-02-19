@@ -2,7 +2,7 @@
 %% autostart
 --]]
 
-function tempDailyCleanUpFunc()
+function DailyCleanUpFunc()
     local currentDate = os.date("*t");
             
     if (string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) == "00:00")
@@ -29,7 +29,7 @@ function tempDailyCleanUpFunc()
       
     end
     
-    setTimeout(tempDailyCleanUpFunc, 60*1000)
+    setTimeout(DailyCleanUpFunc, 60*1000)
 end
 
-tempDailyCleanUpFunc();
+DailyCleanUpFunc();
