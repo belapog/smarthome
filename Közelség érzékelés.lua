@@ -3,6 +3,7 @@
 2 Location
 %% weather
 %% events
+4 GeofenceEvent 5
 %% globals
 --]]
 

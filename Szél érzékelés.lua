@@ -19,12 +19,12 @@ end
 debug("Szél érzékelés");
 
 local wind = tonumber(fibaro:getValue(158, "value"));
-local minTooWindy = 6;
+local minHighWind = tonumber(fibaro:getGlobalValue("MinHighWind"));;
 local currentDate = os.time();
 
 debug (tostring(currentDate));
 
-if (wind >= minTooWindy ) then
+if (wind >= minHighWind ) then
 	debug ("Too windy");
 	fibaro:setGlobal("TooWindy", wind);
 	fibaro:setGlobal("TooWindyTime", tostring(currentDate));

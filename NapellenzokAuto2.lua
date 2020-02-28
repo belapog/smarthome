@@ -34,21 +34,25 @@ local weAreAtHome = (fibaro:getGlobalValue("OtthonVannak") == "Igen");
 debug ("weAreAtHome: " .. tostring(weAreAtHome));
 
 --Weather
+local minHighWind = tonumber(fibaro:getGlobalValue("MinHighWind"));
 local wind = tonumber(fibaro:getValue(158, "value"));
 local tooWindy = fibaro:getGlobalValue("TooWindyTime");
 local timeTakenLastTooWindy = tonumber(os.difftime(os.time(), tooWindy));
 
-local weatherWindy = ((timeTakenLastTooWindy <= (60 * 15)) or (wind >= 6)); -- szeles az idő ha az elmúlt negyd órában volt nagy széllőkés
-local weatherCloudy = api.get('/weather')['WeatherCondition']:lower() == "cloudy";
+-- szeles az idő ha az elmúlt negyed órában volt nagy széllőkés
+local weatherWindy = ((timeTakenLastTooWindy <= (60 * 15)) or (wind >= minHighWind));
+local weatherCondition = api.get('/weather')['WeatherCondition']:lower(); 
+local weatherCloudy = (weatherCondition == "cloudy");
+local weatherRain = (weatherCondition == "rain");
 
 debug ("Wind: " .. tostring(wind));
 debug ("timeTakenLastTooWindy: " .. tostring(timeTakenLastTooWindy));
-debug ("WeatherCondition: " .. api.get('/weather')['WeatherCondition']:lower());
+debug ("WeatherCondition: " .. weatherCondition);
 debug ("weatherWindy: " .. tostring(weatherWindy));
 
-local weatherGoodCondition = (not weatherWindy and not weatherCloudy);
+local weatherGoodCondition = (not weatherWindy and not weatherRain);
 debug ("weatherGoodCondition: " .. tostring(weatherGoodCondition));
-    
+
 
 --Climate
 local isCooling = (fibaro:getGlobalValue("Futes") == "Hűtés");
