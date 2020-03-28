@@ -30,7 +30,7 @@ end
 local targetRollerShutterPosition = "";
 
 --AtHome detection
-local weAreAtHome = (fibaro:getGlobalValue("OtthonVannak") == "Igen");
+local weAreAtHome = ((fibaro:getGlobalValue("OtthonVannak") == "Igen") or (fibaro:getGlobalValue("OtthonVannak") == "Talán"));
 debug ("weAreAtHome: " .. tostring(weAreAtHome));
 
 --Weather

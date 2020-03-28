@@ -32,10 +32,19 @@ function SunSetSunRiseFunc()
     debug("sunset: " .. sunset);
     debug("current: " .. current);
 
+    local actualSet = fibaro:getGlobalValue("Napszak");
+    debug("actualSet: " .. actualSet);
+
     if ((current >= sunrise) and (current <= sunset)) then
         fibaro:setGlobal("Napszak", "Nappal");
+        if (actualSet == "Este") then
+            fibaro:setGlobal("NapellenzoMozgatas", "Auto fel");
+        end
     else
         fibaro:setGlobal("Napszak", "Este");
+        if (actualSet == "Nappal") then
+            fibaro:setGlobal("NapellenzoMozgatas", "Auto fel");
+        end
     end
 
     setTimeout(SunSetSunRiseFunc, 60*1000);
