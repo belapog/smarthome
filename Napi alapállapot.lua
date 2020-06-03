@@ -12,7 +12,13 @@ function DailyCleanUpFunc()
       local maxTemp = fibaro:getGlobal("StatDailyMinTemp2");
       local avgTemp = (maxTemp + minTem)/2;
       fibaro:setGlobal("StatAvgTemp2", avgTemp);
-        
+
+      if (avgTemp > 15) then
+        fibaro:setGlobal("Futes", "Hűtés")
+      else
+        fibaro:setGlobal("Futes", "Fűtés")
+      end
+
 			fibaro:setGlobal("StatDailyMaxTemp", "0");
 			fibaro:setGlobal("StatDailyMinTemp", "0");
 			fibaro:setGlobal("StatMaxTempDate", "");
