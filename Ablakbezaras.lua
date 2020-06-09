@@ -14,7 +14,7 @@ end
 
 function CloseTheWindowNotFunc()
     local currentDate = os.time();
-    debug (tostring(currentDate));
+    debug ("currentDate" .. tostring(currentDate));
     
     if ((( tonumber(fibaro:getValue(96, "value")) > 0 ) or 
             ( tonumber(fibaro:getValue(108, "value")) > 0 ) or 
@@ -26,20 +26,36 @@ function CloseTheWindowNotFunc()
         debug ("Lehet hogy be kellene csukni az ablakot.");
 
         local lastCloseTheWindowNot = fibaro:getGlobalValue("CloseTheWindowNot");
-        debug (tostring(lastCloseTheWindowNot));
+        debug ("lastCloseTheWindowNot" .. tostring(lastCloseTheWindowNot));
 
         local timeTakenLastNot = tonumber(os.difftime(os.time(), lastCloseTheWindowNot));
-        debug (tostring(timeTakenLastNot));
+        debug ("timeTakenLastNot" .. tostring(timeTakenLastNot));
 
-        if (timeTakenLastNot >= (60 * 5)) 
+        if ((timeTakenLastNot >= (60 * 5)) and (tonumber(lastCloseTheWindowNot)  ~= 0))
         then
             debug ("Be kellene csukni az ablakot!");
             fibaro:call(4, "sendDefinedPushNotification", "12");
+      		fibaro:setGlobal("CloseTheWindowNot", tostring(currentDate));
         end
+    	if (tonumber(lastCloseTheWindowNot)  == 0)
+    	then
+    		fibaro:setGlobal("CloseTheWindowNot", tostring(currentDate));
+    	end
     else
         debug ("Nem kell becsukni az ablakot.");
-        fibaro:setGlobal("CloseTheWindowNot", tostring(currentDate));
+        fibaro:setGlobal("CloseTheWindowNot", "0");
     end
+
+    if (( tonumber(fibaro:getValue(96, "value")) == 0 ) and 
+            ( tonumber(fibaro:getValue(108, "value")) == 0 ) and 
+            ( tonumber(fibaro:getValue(105, "value")) == 0 ) and 
+            ( tonumber(fibaro:getValue(31, "value")) == 0 ))
+    then
+        debug ("Minden ablak csukva");
+        fibaro:setGlobal("CloseTheWindowNot", "0");
+    end
+
+    setTimeout(CloseTheWindowNotFunc, 60*1000)
 end
 
 CloseTheWindowNotFunc();
