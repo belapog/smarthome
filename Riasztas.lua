@@ -34,17 +34,19 @@ else
 end
 
 
+
+
 if (
-    (tonumber(fibaro:getValue(57, "value")) > 0 and tonumber(fibaro:getValue(57, "armed")) > 0) or 
-    (tonumber(fibaro:getValue(31, "value")) > 0 and tonumber(fibaro:getValue(31, "armed")) > 0) or
-    (tonumber(fibaro:getValue(98, "value")) > 0 and tonumber(fibaro:getValue(98, "armed")) > 0) or
-    (tonumber(fibaro:getValue(22, "value")) > 0 and tonumber(fibaro:getValue(22, "armed")) > 0) or
-    (tonumber(fibaro:getValue(76, "value")) > 0 and tonumber(fibaro:getValue(76, "armed")) > 0) or
-    (tonumber(fibaro:getValue(96, "value")) > 0 and tonumber(fibaro:getValue(96, "armed")) > 0) or
-    (tonumber(fibaro:getValue(108, "value")) > 0 and tonumber(fibaro:getValue(108, "armed")) > 0) or
-    (tonumber(fibaro:getValue(142, "value")) > 0 and tonumber(fibaro:getValue(142, "armed")) > 0) or 
-    (tonumber(fibaro:getValue(148, "value")) > 0 and tonumber(fibaro:getValue(148, "armed")) > 0) or 
-    (tonumber(fibaro:getValue(105, "value")) > 0 and tonumber(fibaro:getValue(105, "armed")) > 0)
+    (tonumber(fibaro:getValue(177, "value")) > 0 and tonumber(fibaro:getValue(177, "armed")) > 0)  or
+    (tonumber(fibaro:getValue(178, "value")) > 0 and tonumber(fibaro:getValue(178, "armed")) > 0)  or
+    (tonumber(fibaro:getValue(176, "value")) > 0 and tonumber(fibaro:getValue(176, "armed")) > 0)  or
+    (tonumber(fibaro:getValue(175, "value")) > 0 and tonumber(fibaro:getValue(175, "armed")) > 0)  or
+    (tonumber(fibaro:getValue(57, "value")) > 0 and tonumber(fibaro:getValue(57, "armed")) > 0) or
+    (tonumber(fibaro:getValue(22, "value")) > 0 and tonumber(fibaro:getValue(22, "armed")) > 0)  or
+    (tonumber(fibaro:getValue(98, "value")) > 0 and tonumber(fibaro:getValue(98, "armed")) > 0)  or
+    (tonumber(fibaro:getValue(142, "value")) > 0 and tonumber(fibaro:getValue(142, "armed")) > 0)  or
+    (tonumber(fibaro:getValue(148, "value")) > 0 and tonumber(fibaro:getValue(148, "armed")) > 0)  or
+    (tonumber(fibaro:getValue(76, "value")) > 0 and tonumber(fibaro:getValue(76, "armed")) > 0)
 )
 then
 	fibaro:call(4, "sendDefinedPushNotification", "5");

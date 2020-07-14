@@ -28,14 +28,14 @@ debug ("atHome: " .. atHome, 1);
 
 local autoRiaszto = fibaro:getGlobalValue("AutoRiaszto");
 debug ("autoRiaszto: " .. autoRiaszto, 1);
-    
+
 local alarmReady = (
-    (tonumber(fibaro:getValue(31, "value")) == 0) and
-    (tonumber(fibaro:getValue(96, "value")) == 0) and  
-    (tonumber(fibaro:getValue(105, "value")) == 0) and  
-    (tonumber(fibaro:getValue(108, "value")) == 0) );
+    (tonumber(fibaro:getValue(177, "value")) == 0) and  
+    (tonumber(fibaro:getValue(178, "value")) == 0) and  
+    (tonumber(fibaro:getValue(176, "value")) == 0) and 
+    (tonumber(fibaro:getValue(175, "value")) == 0) );
 debug ("alarmReady: " .. tostring(alarmReady));
-    
+
 local secured = (tonumber(fibaro:getValue(124, "secured")) == 255 );
 debug ("secured: " .. tostring(secured));
 
@@ -56,23 +56,21 @@ if ((triggerType ~= "global") and (atHome ~= "Nincsenek") and alarmReady) then
 end
     
 if (alarmReady and secured) then
-    fibaro:call(22, "setArmed", "1");
-    fibaro:call(30, "setArmed", "1");
-    fibaro:call(31, "setArmed", "1");
-    fibaro:call(76, "setArmed", "1");
-    fibaro:call(95, "setArmed", "1");
-    fibaro:call(96, "setArmed", "1");
-    fibaro:call(104, "setArmed", "1");
-    fibaro:call(105, "setArmed", "1");
-    fibaro:call(107, "setArmed", "1");
-    fibaro:call(108, "setArmed", "1");
-    fibaro:call(57, "setArmed", "1");
-    fibaro:call(98, "setArmed", "1");
-    fibaro:call(142, "setArmed", "1");
-    fibaro:call(148, "setArmed", "1");
-    
+	fibaro:call(22, "setArmed", "1");
+	fibaro:call(177, "setArmed", "1");
+	fibaro:call(178, "setArmed", "1");
+	fibaro:call(180, "setArmed", "1");
+	fibaro:call(181, "setArmed", "1");
+	fibaro:call(57, "setArmed", "1");
+	fibaro:call(98, "setArmed", "1");
+	fibaro:call(142, "setArmed", "1");
+	fibaro:call(176, "setArmed", "1");
+	fibaro:call(148, "setArmed", "1");
+	fibaro:call(175, "setArmed", "1");
+	fibaro:call(76, "setArmed", "1");
+
     fibaro:call(124, "secure");
-    
+
     fibaro:setGlobal("Riaszto", "Be");
     
     if (atHome ~= "Nincsenek") then

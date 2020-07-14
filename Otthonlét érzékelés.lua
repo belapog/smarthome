@@ -1,11 +1,12 @@
 --[[
 %% properties
 57 value
-98 value
 22 value
-76 value
+98 value
 142 value
 148 value
+76 value
+180 value
 %% weather
 %% events
 %% globals
@@ -38,25 +39,25 @@ debug ("actualAtHome: " .. actualAtHome);
 
 --Alarmed
 local alarmed = (
-    (tonumber(fibaro:getValue(57, "armed")) > 0) or
-    (tonumber(fibaro:getValue(31, "armed")) > 0) or 
-    (tonumber(fibaro:getValue(98, "armed")) > 0) or 
     (tonumber(fibaro:getValue(22, "armed")) > 0) or
-    (tonumber(fibaro:getValue(76, "armed")) > 0) or
-    (tonumber(fibaro:getValue(96, "armed")) > 0) or
-    (tonumber(fibaro:getValue(108, "armed")) > 0) or
+    (tonumber(fibaro:getValue(177, "armed")) > 0) or 
+    (tonumber(fibaro:getValue(178, "armed")) > 0) or 
+    (tonumber(fibaro:getValue(180, "armed")) > 0) or
+    (tonumber(fibaro:getValue(57, "armed")) > 0) or
+    (tonumber(fibaro:getValue(98, "armed")) > 0) or
     (tonumber(fibaro:getValue(142, "armed")) > 0) or
     (tonumber(fibaro:getValue(148, "armed")) > 0) or
-		(tonumber(fibaro:getValue(105, "armed")) > 0 ));
+    (tonumber(fibaro:getValue(175, "armed")) > 0 ) or
+    (tonumber(fibaro:getValue(76, "armed")) > 0 ));
 debug ("alarmed: " .. tostring(alarmed));
 
 
 --Nincs-e nyitva valami
 local alarmReady = (
-    (tonumber(fibaro:getValue(31, "value")) == 0) and
-    (tonumber(fibaro:getValue(96, "value")) == 0) and  
-    (tonumber(fibaro:getValue(105, "value")) == 0) and  
-    (tonumber(fibaro:getValue(108, "value")) == 0) );
+    (tonumber(fibaro:getValue(177, "value")) == 0) and
+    (tonumber(fibaro:getValue(178, "value")) == 0) and  
+    (tonumber(fibaro:getValue(176, "value")) == 0) and  
+    (tonumber(fibaro:getValue(175, "value")) == 0) );
 debug ("alarmReady: " .. tostring(alarmReady));
 
 
