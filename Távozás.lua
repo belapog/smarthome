@@ -71,7 +71,6 @@ if (alarmReady and secured) then
 
     fibaro:call(124, "secure");
 
-    fibaro:setGlobal("Riaszto", "Be");
     
     if (atHome ~= "Nincsenek") then
         fibaro:setGlobal("OtthonVannak", "Nincsenek");

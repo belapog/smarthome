@@ -38,5 +38,4 @@ fibaro:call(148, "setArmed", "0");
 fibaro:call(175, "setArmed", "0");
 fibaro:call(76, "setArmed", "0");
 
-fibaro:setGlobal("Riaszto", "Ki");
 debug ('Riaszto kikapcsolva', 2)
