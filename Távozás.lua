@@ -56,22 +56,20 @@ if ((triggerType ~= "global") and (atHome ~= "Nincsenek") and alarmReady) then
 end
     
 if (alarmReady and secured) then
-	fibaro:call(22, "setArmed", "1");
+    fibaro:call(22, "setArmed", "1");
+    fibaro:call(57, "setArmed", "1");
+    fibaro:call(76, "setArmed", "1");
+    fibaro:call(98, "setArmed", "1");
+    fibaro:call(142, "setArmed", "1");
+	fibaro:call(148, "setArmed", "1");
+    fibaro:call(175, "setArmed", "1");
+    fibaro:call(176, "setArmed", "1");
 	fibaro:call(177, "setArmed", "1");
 	fibaro:call(178, "setArmed", "1");
 	fibaro:call(180, "setArmed", "1");
-	fibaro:call(181, "setArmed", "1");
-	fibaro:call(57, "setArmed", "1");
-	fibaro:call(98, "setArmed", "1");
-	fibaro:call(142, "setArmed", "1");
-	fibaro:call(176, "setArmed", "1");
-	fibaro:call(148, "setArmed", "1");
-	fibaro:call(175, "setArmed", "1");
-	fibaro:call(76, "setArmed", "1");
 
     fibaro:call(124, "secure");
 
-    
     if (atHome ~= "Nincsenek") then
         fibaro:setGlobal("OtthonVannak", "Nincsenek");
     end

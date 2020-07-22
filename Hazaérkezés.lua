@@ -29,7 +29,6 @@ fibaro:call(22, "setArmed", "0");
 fibaro:call(177, "setArmed", "0");
 fibaro:call(178, "setArmed", "0");
 fibaro:call(180, "setArmed", "0");
-fibaro:call(181, "setArmed", "0");
 fibaro:call(57, "setArmed", "0");
 fibaro:call(98, "setArmed", "0");
 fibaro:call(142, "setArmed", "0");
