@@ -1,29 +1,41 @@
 --[[
 %% properties
-57 value
-31 value
-98 value
 22 value
-76 value
-96 value
-108 value
-105 value
+98 value
 142 value
 148 value
-57 armed
-31 armed
-98 armed
+76 value
+177 value
+178 value
+57 value
+176 value
+175 value
+180 value
 22 armed
-76 armed
-96 armed
-108 armed
-105 armed
+98 armed
 142 armed
 148 armed
+76 armed
+177 armed
+178 armed
+57 armed
+176 armed
+175 armed
+180 armed
 %% weather
 %% events
 %% globals
 --]]
+
+function debug(message, level)
+    if level == nil then
+        level = 1;
+    end
+    local debugLevel = 2;
+    if (level >= debugLevel) then
+        fibaro:debug (message);
+    end
+end
 
 local trigger = fibaro:getSourceTrigger();
 local triggerDevice;
@@ -33,23 +45,44 @@ else
     triggerDevice = "other";
 end
 
-
-
+debug ("Riasztás elindítva");
 
 if (
-    (tonumber(fibaro:getValue(177, "value")) > 0 and tonumber(fibaro:getValue(177, "armed")) > 0)  or
+    (tonumber(fibaro:getValue(22, "value")) > 0 and tonumber(fibaro:getValue(22, "armed")) > 0)  or  
+    (tonumber(fibaro:getValue(98, "value")) > 0 and tonumber(fibaro:getValue(98, "armed")) > 0) or  
+    (tonumber(fibaro:getValue(142, "value")) > 0 and tonumber(fibaro:getValue(142, "armed")) > 0) or  
+    (tonumber(fibaro:getValue(148, "value")) > 0 and tonumber(fibaro:getValue(148, "armed")) > 0) or  
+    (tonumber(fibaro:getValue(76, "value")) > 0 and tonumber(fibaro:getValue(76, "armed")) > 0) or
+    (tonumber(fibaro:getValue(177, "value")) > 0 and tonumber(fibaro:getValue(177, "armed")) > 0)  or  
     (tonumber(fibaro:getValue(178, "value")) > 0 and tonumber(fibaro:getValue(178, "armed")) > 0)  or
+    (tonumber(fibaro:getValue(57, "value")) > 0 and tonumber(fibaro:getValue(57, "armed")) > 0)  or
     (tonumber(fibaro:getValue(176, "value")) > 0 and tonumber(fibaro:getValue(176, "armed")) > 0)  or
     (tonumber(fibaro:getValue(175, "value")) > 0 and tonumber(fibaro:getValue(175, "armed")) > 0)  or
-    (tonumber(fibaro:getValue(57, "value")) > 0 and tonumber(fibaro:getValue(57, "armed")) > 0) or
-    (tonumber(fibaro:getValue(22, "value")) > 0 and tonumber(fibaro:getValue(22, "armed")) > 0)  or
-    (tonumber(fibaro:getValue(98, "value")) > 0 and tonumber(fibaro:getValue(98, "armed")) > 0)  or
-    (tonumber(fibaro:getValue(142, "value")) > 0 and tonumber(fibaro:getValue(142, "armed")) > 0)  or
-    (tonumber(fibaro:getValue(148, "value")) > 0 and tonumber(fibaro:getValue(148, "armed")) > 0)  or
-    (tonumber(fibaro:getValue(76, "value")) > 0 and tonumber(fibaro:getValue(76, "armed")) > 0)
+    (tonumber(fibaro:getValue(180, "value")) > 0 and tonumber(fibaro:getValue(180, "armed")) > 0) 
 )
 then
-	fibaro:call(4, "sendDefinedPushNotification", "5");
+    debug ("Riasztás van!!!", 2);
+	fibaro:call(183, "turnOn");
+	setTimeout(function()
+		fibaro:call(183, "turnOff");
+	end, 60000)
 end
 
-
+if (
+    (tonumber(fibaro:getValue(22, "armed")) == 0)  and  
+    (tonumber(fibaro:getValue(98, "armed")) == 0) and  
+    (tonumber(fibaro:getValue(142, "armed")) == 0) and  
+    (tonumber(fibaro:getValue(148, "armed")) == 0) and  
+    (tonumber(fibaro:getValue(76, "armed")) == 0) and
+    (tonumber(fibaro:getValue(177, "armed")) == 0)  and  
+    (tonumber(fibaro:getValue(178, "armed")) == 0)  and
+    (tonumber(fibaro:getValue(57, "armed")) == 0)  and
+    (tonumber(fibaro:getValue(176, "armed")) == 0)  and
+    (tonumber(fibaro:getValue(175, "armed")) == 0)  and
+    (tonumber(fibaro:getValue(180, "armed")) == 0) and
+    (tonumber(fibaro:getValue(183, "value")) > 0 )
+)
+then
+    debug ("Riasztó kikapcsolás", 2);
+    fibaro:call(183, "turnOff");
+end
