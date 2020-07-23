@@ -12,7 +12,7 @@
 %% globals
 --]]
 
-function debug(message, level)
+function Debug(message, level)
     if level == nil then
         level = 1;
     end
@@ -22,20 +22,31 @@ function debug(message, level)
     end
 end
 
+function GetSourceTrigger ()
+    local trigger = fibaro:getSourceTrigger();
+    local triggerDevice;
+    if (trigger['type'] == 'property') then
+        triggerDevice = trigger['deviceID'];
+    else
+        triggerDevice = "other";
+    end
+    return triggerDevice;
+end
+
 function AtHomeDetection()
-    debug ("tempAtHomeDetection started");
-    
+    Debug ("tempAtHomeDetection started");
+  
     local tempAtHome = fibaro:getGlobalValue("OtthonVannak");
     if (tempAtHome == "Talán") then
         fibaro:setGlobal("OtthonVannak", "Nincsenek");
     end
 end
 
-debug ("Otthon érzékelés elindítva");
+Debug ("Otthon érzékelés elindítva" .. GetSourceTrigger());
 
 --Actual value
 local actualAtHome = fibaro:getGlobalValue("OtthonVannak");
-debug ("actualAtHome: " .. actualAtHome);
+Debug ("actualAtHome: " .. actualAtHome);
 
 --Alarmed
 local alarmed = (
@@ -49,7 +60,7 @@ local alarmed = (
     (tonumber(fibaro:getValue(148, "armed")) > 0) or
     (tonumber(fibaro:getValue(175, "armed")) > 0 ) or
     (tonumber(fibaro:getValue(76, "armed")) > 0 ));
-debug ("alarmed: " .. tostring(alarmed));
+Debug ("alarmed: " .. tostring(alarmed));
 
 
 --Nincs-e nyitva valami
@@ -58,7 +69,7 @@ local alarmReady = (
     (tonumber(fibaro:getValue(178, "value")) == 0) and  
     (tonumber(fibaro:getValue(176, "value")) == 0) and  
     (tonumber(fibaro:getValue(175, "value")) == 0) );
-debug ("alarmReady: " .. tostring(alarmReady));
+Debug ("alarmReady: " .. tostring(alarmReady));
 
 
 --Mi triggerelte az eseményt /ajtó vagy mozgás érzékelő/
@@ -66,7 +77,7 @@ local trigger = fibaro:getSourceTrigger();
 local triggerDeviceType;
 if (trigger['type'] == 'property') then
     local triggerDeviceId = trigger['deviceID'];
-    debug ("triggerDeviceId: " .. triggerDeviceId);
+    Debug ("triggerDeviceId: " .. triggerDeviceId);
     if (triggerDeviceId == 98 or triggerDeviceId == 22 or triggerDeviceId == 76  or triggerDeviceId == 142  or triggerDeviceId == 148) then
         triggerDeviceType = "Motion";
     else
@@ -75,13 +86,13 @@ if (trigger['type'] == 'property') then
 else
     triggerDeviceType = "other";
 end
-debug ("triggerDeviceType: " .. triggerDeviceType);
+Debug ("triggerDeviceType: " .. triggerDeviceType);
 
 local newAtHome = "";
 if (triggerDeviceType == "Door") then
     local doorState = tonumber(fibaro:getValue(57, "value"));
-    debug ("doorState: " .. tostring(doorState));
-    
+    Debug ("doorState: " .. tostring(doorState));
+
     if ((actualAtHome == "Igen") and (doorState == 0)) then
         if alarmed then
             newAtHome = "Nincsenek";
@@ -92,7 +103,7 @@ if (triggerDeviceType == "Door") then
         --Ha ablak vagy ajtó nyitva akkor üzenet
         if (not alarmReady) then
             fibaro:call(4, "sendDefinedPushNotification", "7");
-            debug("Valamelyik ablak nyitva van");
+            Debug("Valamelyik ablak nyitva van");
         end
     end
     if ((actualAtHome ~= "Igen") and (not alarmed) and (doorState > 0)) then
@@ -104,12 +115,12 @@ if ((triggerDeviceType == "Motion") and (actualAtHome == "Talán")) then
     newAtHome = "Igen";
 end
 
---ez nem egy vaószínű eset, csak ha az ajtó érzékelő nem működik jól
+--ez nem egy valószínű eset, csak ha az ajtó érzékelő nem működik jól
 if ((triggerDeviceType == "Motion") and (actualAtHome == "Nincsenek") and (not alarmed)) then
     newAtHome = "Igen";
 end
 
-debug ("newAtHome: " .. newAtHome);
+Debug ("newAtHome: " .. newAtHome);
 
 if (newAtHome ~= "") then
     fibaro:setGlobal("OtthonVannak", newAtHome);
