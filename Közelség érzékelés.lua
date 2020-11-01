@@ -33,7 +33,7 @@ then
         then
             debug ("Elmentem");
             fibaro:call(184, "sendDefinedPushNotification", "14");
-            fibaro:startScene(56);
+            fibaro:startScene(79);
         end
     end
 end

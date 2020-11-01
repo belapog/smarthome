@@ -35,7 +35,7 @@ end
 
 function AtHomeDetection()
     Debug ("tempAtHomeDetection started");
-  
+
     local tempAtHome = fibaro:getGlobalValue("OtthonVannak");
     if (tempAtHome == "Talán") then
         fibaro:setGlobal("OtthonVannak", "Nincsenek");
@@ -51,8 +51,8 @@ Debug ("actualAtHome: " .. actualAtHome);
 --Alarmed
 local alarmed = (
     (tonumber(fibaro:getValue(22, "armed")) > 0) or
-    (tonumber(fibaro:getValue(177, "armed")) > 0) or 
-    (tonumber(fibaro:getValue(178, "armed")) > 0) or 
+    (tonumber(fibaro:getValue(177, "armed")) > 0) or
+    (tonumber(fibaro:getValue(178, "armed")) > 0) or
     (tonumber(fibaro:getValue(180, "armed")) > 0) or
     (tonumber(fibaro:getValue(57, "armed")) > 0) or
     (tonumber(fibaro:getValue(98, "armed")) > 0) or
@@ -66,8 +66,8 @@ Debug ("alarmed: " .. tostring(alarmed));
 --Nincs-e nyitva valami
 local alarmReady = (
     (tonumber(fibaro:getValue(177, "value")) == 0) and
-    (tonumber(fibaro:getValue(178, "value")) == 0) and  
-    (tonumber(fibaro:getValue(176, "value")) == 0) and  
+    (tonumber(fibaro:getValue(178, "value")) == 0) and
+    (tonumber(fibaro:getValue(176, "value")) == 0) and
     (tonumber(fibaro:getValue(175, "value")) == 0) );
 Debug ("alarmReady: " .. tostring(alarmReady));
 
@@ -96,7 +96,7 @@ if (triggerDeviceType == "Door") then
     if ((actualAtHome == "Igen") and (doorState == 0)) then
         if alarmed then
             newAtHome = "Nincsenek";
-        else    
+        else
             newAtHome = "Talán";
             setTimeout(AtHomeDetection, 15*60*1000);
         end
@@ -109,6 +109,13 @@ if (triggerDeviceType == "Door") then
     if ((actualAtHome ~= "Igen") and (not alarmed) and (doorState > 0)) then
         newAtHome = "Igen";
     end
+end
+
+--ez az az eset, ha kódból iondítottuk el
+if (triggerDeviceType == "other" and alarmReady and actualAtHome == "Igen") then
+    Debug("Direkt indítás, allarm ready");
+    newAtHome = "Talán";
+    setTimeout(AtHomeDetection, 15*60*1000);
 end
 
 if ((triggerDeviceType == "Motion") and (actualAtHome == "Talán")) then
