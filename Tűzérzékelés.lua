@@ -25,7 +25,7 @@ or
 startSource["type"] == "other"
 )
 then
-	fibaro:call(4, "sendDefinedPushNotification", "13");
+	fibaro:call(184, "sendDefinedPushNotification", "13");
 end
 
 

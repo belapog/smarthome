@@ -1,9 +1,8 @@
 --[[
 %% properties
-2 Location
 %% weather
 %% events
-4 GeofenceEvent 5
+184 GeofenceEvent 5
 %% globals
 --]]
 
@@ -17,11 +16,24 @@ function debug(message, level)
     end
 end
 
-local distance = fibaro:calculateDistance(fibaro:getValue(2, "Location"), "47.60;19.06");
-local previousDistance = fibaro:calculateDistance(fibaro:getValue(2, "PreviousLocation"), "47.60;19.06");
-local location = fibaro:getValue(2, "Location");
+local startSource = fibaro:getSourceTrigger();
+local startSourceType = startSource["type"];
 
-debug ("distance: " .. tostring(distance));
-debug ("previousDistance: " .. tostring(previousDistance));
-
-debug ("location: " .. tostring(location));
+if (startSourceType == "event")
+then
+    if (startSource.event["type"] == "GeofenceEvent")
+    then
+        if(startSource.event.data["geofenceAction"] == "enter")
+        then
+            debug ("Hazaérkeztem");
+            fibaro:call(184, "sendDefinedPushNotification", "9");
+            fibaro:startScene(57);
+        end
+        if(startSource.event.data["geofenceAction"] == "leave")
+        then
+            debug ("Elmentem");
+            fibaro:call(184, "sendDefinedPushNotification", "14");
+            fibaro:startScene(56);
+        end
+    end
+end

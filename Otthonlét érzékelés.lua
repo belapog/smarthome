@@ -102,7 +102,7 @@ if (triggerDeviceType == "Door") then
         end
         --Ha ablak vagy ajtó nyitva akkor üzenet
         if (not alarmReady) then
-            fibaro:call(4, "sendDefinedPushNotification", "7");
+            fibaro:call(184, "sendDefinedPushNotification", "7");
             Debug("Valamelyik ablak nyitva van");
         end
     end

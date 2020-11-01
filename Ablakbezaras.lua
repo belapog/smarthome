@@ -34,7 +34,7 @@ function CloseTheWindowNotFunc()
         if ((timeTakenLastNot >= (60 * 5)) and (tonumber(lastCloseTheWindowNot)  ~= 0))
         then
             debug ("Be kellene csukni az ablakot!");
-            fibaro:call(4, "sendDefinedPushNotification", "12");
+            fibaro:call(184, "sendDefinedPushNotification", "12");
       		fibaro:setGlobal("CloseTheWindowNot", tostring(currentDate));
         end
     	if (tonumber(lastCloseTheWindowNot)  == 0)

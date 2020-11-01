@@ -24,13 +24,13 @@ debug ("páratartalom: " .. tostring(paratartalom));
 if ((paratartalom > 70 ))
 then
 		debug("Nagy a páratartalom!", 2);
-		fibaro:call(4, "sendDefinedPushNotification", "10");
+		fibaro:call(184, "sendDefinedPushNotification", "10");
 end
 
 if (( paratartalom < 30 ))
 then
 		debug("Alacsony a páratartalom!", 2);
-		fibaro:call(4, "sendDefinedPushNotification", "11");
+		fibaro:call(184, "sendDefinedPushNotification", "11");
 end
 
 

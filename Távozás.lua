@@ -77,6 +77,6 @@ if (alarmReady and secured) then
 end
 
 if (not alarmReady and secured) then 
-    fibaro:call(4, "sendDefinedPushNotification", "7");
+    fibaro:call(184, "sendDefinedPushNotification", "7");
     debug("Riaszto nem aktiválható, valamelyik ablak nyitva van");
 end

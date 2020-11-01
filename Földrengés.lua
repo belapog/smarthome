@@ -26,5 +26,5 @@ if (
     tonumber(fibaro:getValue(79, "value")) > 0)
 then
     debug("Földrengés!!!");
-    fibaro:call(4, "sendDefinedPushNotification", "8");
+    fibaro:call(184, "sendDefinedPushNotification", "8");
 end
