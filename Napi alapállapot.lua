@@ -19,6 +19,17 @@ function DailyCleanUpFunc()
         fibaro:setGlobal("Futes", "Fűtés")
       end
 
+      local airPressure = tonumber(fibaro:getValue(159, "value"));
+      local airPressureMax = fibaro:getGlobal("AirPressureMin");
+      local airPressureMin = fibaro:getGlobal("AirPressureMax");
+      local airPressureAvg = (airPressureMin + airPressureMin)/2;
+      local lastAirPressureAvg = fibaro:getGlobal("AirPressureAvg");
+      local airPressureChange = lastAirPressureAvg / airPressureAvg;
+      fibaro:setGlobal("AirPressureAvg", airPressureAvg);
+      fibaro:setGlobal("AirPressureChange", airPressureChange);
+      fibaro:setGlobal("AirPressureMin", airPressure);
+      fibaro:setGlobal("AirPressureMax", airPressure);
+
 			fibaro:setGlobal("StatDailyMaxTemp", "0");
 			fibaro:setGlobal("StatDailyMinTemp", "0");
 			fibaro:setGlobal("StatMaxTempDate", "");
