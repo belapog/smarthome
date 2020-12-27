@@ -24,7 +24,7 @@ function DailyCleanUpFunc()
       local airPressureMin = fibaro:getGlobal("AirPressureMax");
       local airPressureAvg = (airPressureMin + airPressureMin)/2;
       local lastAirPressureAvg = fibaro:getGlobal("AirPressureAvg");
-      local airPressureChange = lastAirPressureAvg / airPressureAvg;
+      local airPressureChange =  airPressureAvg / lastAirPressureAvg * 100;
       fibaro:setGlobal("AirPressureAvg", airPressureAvg);
       fibaro:setGlobal("AirPressureChange", airPressureChange);
       fibaro:setGlobal("AirPressureMin", airPressure);
