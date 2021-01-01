@@ -6,26 +6,28 @@
 %% globals
 --]]
 
-function debug(message, level)
-    if level == nil then
-        level = 1;
-    end
-    local debugLevel = 2;
-    if (level >= debugLevel) then
-        fibaro:debug (message);
-    end
-end
+--=================================================
+-- Common functions
+--=================================================
+local debug = false
+local function log(str) if debug then fibaro:debug(str); end; end
+local function errorlog(str) fibaro:debug("<font color='red'>"..str.."</font>"); end
 
-debug("Szél érzékelés");
+--=================================================
+-- Main
+--=================================================
+log("Szél érzékelés elindítva");
 
 local wind = tonumber(fibaro:getValue(158, "value"));
-local minHighWind = tonumber(fibaro:getGlobalValue("MinHighWind"));;
+local minHighWind = tonumber(fibaro:getGlobalValue("MinHighWind"));
 local currentDate = os.time();
 
-debug (tostring(currentDate));
+log("wind: " .. tostring(wind));
+log("minHighWind: " .. tostring(minHighWind));
+log("currentDate: " .. tostring(currentDate));
 
 if (wind >= minHighWind ) then
-	debug ("Too windy");
+	log ("Nagy a szél");
 	fibaro:setGlobal("TooWindy", wind);
 	fibaro:setGlobal("TooWindyTime", tostring(currentDate));
 end

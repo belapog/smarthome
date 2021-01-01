@@ -1,18 +1,19 @@
 --[[
 %% autostart
 --]]
+--=================================================
+-- Common functions
+--=================================================
+local debug = false
+local function log(str) if debug then fibaro:debug(str); end; end
+local function errorlog(str) fibaro:debug("<font color='red'>"..str.."</font>"); end
 
-function debug(message, level)
-    if level == nil then
-        level = 1;
-    end
-    local debugLevel = 2;
-    if (level >= debugLevel) then
-        fibaro:debug (message);
-    end
-end
-
+--=================================================
+-- Main
+--=================================================
+log("Napfelkelte-napnyugtat elindítva");
 function SunSetSunRiseFunc()
+    log("Napfelkelte-napnyugtat időzített eljárás elindítva");
     local sunriseTime = fibaro:getValue(1, "sunriseHour");
     local sunriseHour = tonumber(string.sub(sunriseTime,1,2));
     local sunriseMin = tonumber(string.sub(sunriseTime,4, 6));
@@ -28,21 +29,25 @@ function SunSetSunRiseFunc()
     local currentMin = currentDate.min;
     local current = currentHour * 60 + currentMin;
 
-    debug("sunrise: " .. sunrise);
-    debug("sunset: " .. sunset);
-    debug("current: " .. current);
+    log("sunrise: " .. sunrise);
+    log("sunset: " .. sunset);
+    log("current: " .. current);
 
     local actualSet = fibaro:getGlobalValue("Napszak");
-    debug("actualSet: " .. actualSet);
+    log("actualSet: " .. actualSet);
 
     if ((current >= sunrise) and (current <= sunset)) then
+        log ("Napszak = Nappal");
         fibaro:setGlobal("Napszak", "Nappal");
         if (actualSet == "Este") then
+            log ("NapellenzoMozgatas = Auto fel");
             fibaro:setGlobal("NapellenzoMozgatas", "Auto fel");
         end
     else
+        log ("Napszak = Este");
         fibaro:setGlobal("Napszak", "Este");
         if (actualSet == "Nappal") then
+            log ("NapellenzoMozgatas = Auto fel");
             fibaro:setGlobal("NapellenzoMozgatas", "Auto fel");
         end
     end
