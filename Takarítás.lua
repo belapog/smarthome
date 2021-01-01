@@ -45,4 +45,3 @@ end
 IFTTTWebhooks("Start_Cleaning", fibaro:getGlobalValue("IFTTTWebhookKey"));
 log("Porszívó elindítva");
 setTimeout(startMopping, 100*60*1000);
-
