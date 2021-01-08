@@ -6,33 +6,34 @@
 %% globals
 --]]
 
-function debug(message, level)
-    if level == nil then
-        level = 1;
-    end
-    local debugLevel = 2;
-    if (level >= debugLevel) then
-        fibaro:debug (message);
-    end
-end
+--=================================================
+-- Common functions
+--=================================================
+local debug = false
+local function log(str) if debug then fibaro:debug(str); end; end
+local function errorlog(str) fibaro:debug("<font color='red'>"..str.."</font>"); end
+local function infolog(str) fibaro:debug("<font color='yellow'>"..str.."</font>"); end
 
-debug("Páratartalom figyelés strated");
+--=================================================
+-- Main
+--=================================================
+log("Páratartalom figyelés strated");
 
 local paratartalom = tonumber(fibaro:getValue(140, "value"));
-debug ("páratartalom: " .. tostring(paratartalom));
+log ("páratartalom: " .. tostring(paratartalom));
 
+--Páratartalom figyelmeztetések
 if ((paratartalom > 70 ))
 then
-		debug("Nagy a páratartalom!", 2);
+		log("Nagy a páratartalom!", 2);
 		fibaro:call(184, "sendDefinedPushNotification", "10");
 end
 
 if (( paratartalom < 30 ))
 then
-		debug("Alacsony a páratartalom!", 2);
+		log("Alacsony a páratartalom!", 2);
 		fibaro:call(184, "sendDefinedPushNotification", "11");
 end
-
 
 --Napi statisztika
 local minHum = fibaro:getGlobal("StatDailyMinHum");
@@ -45,11 +46,11 @@ local currenthour = string.format("%02d", currentDate.hour) .. ":" .. string.for
 if ((paratartalom > maxHumNum) or (maxHumNum == 0)) then
   fibaro:setGlobal("StatDailyMaxHum", paratartalom);
   fibaro:setGlobal("StatMaxHumDate", currenthour);
-  debug ("MaxHum set: " .. tostring(paratartalom));
+  log ("MaxHum set: " .. tostring(paratartalom));
 end
 
 if ((paratartalom < minHumNum) or (minHumNum == 0)) then
   fibaro:setGlobal("StatDailyMinHum", paratartalom);
   fibaro:setGlobal("StatMinHumDate", currenthour);
-  debug ("MinHum set: " .. tostring(paratartalom));
+  log ("MinHum set: " .. tostring(paratartalom));
 end

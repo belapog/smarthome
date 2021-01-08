@@ -7,54 +7,57 @@
 OtthonVannak
 --]]
 
-function debug(message, level)
-    if level == nil then
-        level = 1;
-    end
-    local debugLevel = 2;
-    if (level >= debugLevel) then
-        fibaro:debug (message);
-    end
-end
+--=================================================
+-- Common functions
+--=================================================
+local debug = true
+local function log(str) if debug then fibaro:debug(str); end; end
+local function errorlog(str) fibaro:debug("<font color='red'>"..str.."</font>"); end
+local function infolog(str) fibaro:debug("<font color='yellow'>"..str.."</font>"); end
 
-debug ("Távozás elindítva");
+--=================================================
+-- Main
+--=================================================
+log ("Távozás elindítva");
 
 local trigger = fibaro:getSourceTrigger();
 local triggerType = trigger['type'];
-debug ("triggerType: " .. triggerType);
+log ("triggerType: " .. triggerType);
 
 local atHome = fibaro:getGlobalValue("OtthonVannak");
-debug ("atHome: " .. atHome, 1);
+log ("atHome: " .. atHome);
 
 local autoRiaszto = fibaro:getGlobalValue("AutoRiaszto");
-debug ("autoRiaszto: " .. autoRiaszto, 1);
+log ("autoRiaszto: " .. autoRiaszto);
 
 local alarmReady = (
     (tonumber(fibaro:getValue(177, "value")) == 0) and  
     (tonumber(fibaro:getValue(178, "value")) == 0) and  
     (tonumber(fibaro:getValue(176, "value")) == 0) and 
     (tonumber(fibaro:getValue(175, "value")) == 0) );
-debug ("alarmReady: " .. tostring(alarmReady));
+log ("alarmReady: " .. tostring(alarmReady));
 
 local secured = (tonumber(fibaro:getValue(124, "secured")) == 255 );
-debug ("secured: " .. tostring(secured));
+log ("secured: " .. tostring(secured));
 
---Automata riasztás
+--Automata riasztás esete (nincsenek otthon)
 if ((triggerType == "global") and (atHome == "Nincsenek") and alarmReady and (autoRiaszto == "Igen")) then
     fibaro:call(124, "secure");
     secured = true;
-    debug ("Automata riasztás bekapcsolása");
+    log ("Automata riasztás bekapcsolása");
 end
 
+--Kézi indítás esete
 if ((triggerType ~= "global") and (atHome ~= "Nincsenek") and alarmReady) then
     fibaro:setGlobal("OtthonVannak", "Nincsenek");
     atHome = "Nincsenek";
     fibaro:call(124, "secure");
     secured = true;
-    debug ("secured");
-    debug ("OtthonVannak set to Nincsenek");
+    log ("secured");
+    log ("OtthonVannak set to Nincsenek");
 end
-    
+
+--Riasztó bekapcsolás
 if (alarmReady and secured) then
     fibaro:call(22, "setArmed", "1");
     fibaro:call(57, "setArmed", "1");
@@ -73,10 +76,10 @@ if (alarmReady and secured) then
     if (atHome ~= "Nincsenek") then
         fibaro:setGlobal("OtthonVannak", "Nincsenek");
     end
-    debug("Riaszto aktiválva", 2);
+    log("Riaszto aktiválva", 2);
 end
 
 if (not alarmReady and secured) then 
     fibaro:call(184, "sendDefinedPushNotification", "7");
-    debug("Riaszto nem aktiválható, valamelyik ablak nyitva van");
+    log("Riaszto nem aktiválható, valamelyik ablak nyitva van");
 end

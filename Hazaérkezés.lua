@@ -6,20 +6,22 @@
 %% globals
 --]]
 
-function debug(message, level)
-    if level == nil then
-        level = 1;
-    end
-    local debugLevel = 2;
-    if (level >= debugLevel) then
-        fibaro:debug (message);
-    end
-end
+--=================================================
+-- Common functions
+--=================================================
+local debug = true
+local function log(str) if debug then fibaro:debug(str); end; end
+local function errorlog(str) fibaro:debug("<font color='red'>"..str.."</font>"); end
+local function infolog(str) fibaro:debug("<font color='yellow'>"..str.."</font>"); end
 
-debug ('Hazaérkezés elindítva')
+--=================================================
+-- Main
+--=================================================
+
+log ('Hazaérkezés elindítva')
 
 local secured = (tonumber(fibaro:getValue(124, "secured")) == 0 )
-debug ("secured: " .. tostring(secured));
+log ("secured: " .. tostring(secured));
 
 if secured then
     fibaro:call(124, "unsecure");
@@ -37,4 +39,4 @@ fibaro:call(148, "setArmed", "0");
 fibaro:call(175, "setArmed", "0");
 fibaro:call(76, "setArmed", "0");
 
-debug ('Riaszto kikapcsolva', 2)
+infolog ('Riaszto kikapcsolva')
