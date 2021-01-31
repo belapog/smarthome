@@ -23,7 +23,6 @@ local function infolog(str) fibaro:debug("<font color='yellow'>"..str.."</font>"
 --=================================================
 local timer = 120;
 local currentDate = os.time();
---local offTime = 3;
 
 log ("Kapcsoló automata elindítva");
 
@@ -42,7 +41,9 @@ if (trigger['type'] == 'property') then
             triggerDevice = "EloszobaMozgas";
         end
     elseif (triggerDeviceId == 188) then
-        triggerDevice = "WCAjtoNyitas";
+        if (tonumber(fibaro:getValue(188, "value")) > 0 ) then
+            triggerDevice = "WCAjtoNyitas";
+        end
     end
 end
 log ("triggerDevice: " .. triggerDevice);
@@ -68,9 +69,6 @@ end
 
 
 if (triggerDevice == "EloszobaMozgas") then
-    --local lastSwithOnDate = fibaro:getGlobalValue("SwitchOn164");
-    --local timeTakenLastSwitchOnDate = tonumber(os.difftime(os.time(), lastSwithOnDate));
-    --log("timeTakenLastSwitchOnDate: " .. tostring(timeTakenLastSwitchOnDate));
     if (tonumber(fibaro:getValue(188, "value")) > 0) then
         fibaro:call(164, "turnOff");
         log ("turnOff Off Motion");
@@ -78,13 +76,6 @@ if (triggerDevice == "EloszobaMozgas") then
 end
 
 if (triggerDevice == "WCAjtoNyitas") then
-    if (
-    ( tonumber(fibaro:getValue(188, "value")) > 0 )
-    and
-    ( tonumber(fibaro:getValue(164, "value")) > 0 )
-    )
-    then
-        log("WC lámpa kikapcs");
-        fibaro:call(164, "turnOff");
-    end
+    log("WC lámpa kikapcs");
+    fibaro:call(164, "turnOff");
 end
