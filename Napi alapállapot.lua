@@ -38,7 +38,7 @@ function DailyCleanUpFunc()
 			fibaro:setGlobal("StatDailyMinTemp2", "-100");
 			fibaro:setGlobal("StatMaxTempDate2", "");
 			fibaro:setGlobal("StatMinTempDate2", "");
-      fibaro:setGlobal("NapellenzoMozgatas", "Auto fel");
+      fibaro:setGlobal("NapellenzoStatus", "Auto fel");
 			fibaro:setGlobal("StatDailyMaxHum", "0");
 			fibaro:setGlobal("StatDailyMinHum", "0");
 			fibaro:setGlobal("StatMaxHumDate", "");

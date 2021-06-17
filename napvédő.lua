@@ -40,5 +40,22 @@ if ((heating == "Hűtés")  and  (temperature > targetTemperature+1) and (not we
     fibaro:call(121, "setValue", "30");
     fibaro:call(115, "setValue", "30");
     fibaro:call(129, "setValue", "30");
-    fibaro:startScene(31);
+    fibaro:startScene(51);
+    log ("rollerShutterPosition: " .. tostring(fibaro:getValue(10, "value")));
+
+    --várakozás, hogy elindúlt-e lefelé a napvédő?
+    local start = os.time()
+    repeat until os.time() > start + 30
+    local rollerShutterPositionNotUp = (tonumber(fibaro:getValue(13, "value")) < 99  or  
+    tonumber(fibaro:getValue(10, "value")) < 99  or  
+    tonumber(fibaro:getValue(16, "value")) < 99  or  
+    tonumber(fibaro:getValue(19, "value")) < 99
+    )
+    log ("rollerShutterPosition: " .. tostring(fibaro:getValue(10, "value")));
+    log ("rollerShutterPositionNotUp: " .. tostring(rollerShutterPositionNotUp));
+
+    if rollerShutterPositionNotUp then
+        infolog("Hővédelem aktív")
+        fibaro:setGlobal("NapellenzoStatus", "Hővédelem");
+    end
 end

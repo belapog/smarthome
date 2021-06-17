@@ -40,15 +40,15 @@ function SunSetSunRiseFunc()
         log ("Napszak = Nappal");
         fibaro:setGlobal("Napszak", "Nappal");
         if (actualSet == "Este") then
-            log ("NapellenzoMozgatas = Auto fel");
-            fibaro:setGlobal("NapellenzoMozgatas", "Auto fel");
+            log ("NapellenzoStatus = Auto fel");
+            fibaro:setGlobal("NapellenzoStatus", "Auto fel");
         end
     else
         log ("Napszak = Este");
         fibaro:setGlobal("Napszak", "Este");
         if (actualSet == "Nappal") then
-            log ("NapellenzoMozgatas = Auto fel");
-            fibaro:setGlobal("NapellenzoMozgatas", "Auto fel");
+            log ("NapellenzoStatus = Auto fel");
+            fibaro:setGlobal("NapellenzoStatus", "Auto fel");
         end
     end
 

@@ -52,12 +52,14 @@ function TempHomersegletAuto()
     
     ujHomerseglet = celHomerseglet;
 
-    if alvas and heating then
+    if alvas and heating == "Fűtés" then
         ujHomerseglet = ejszakaiHomerseglet;
+        log("Éjszakai hőmérséglet fűtésnél");
     end
 
-    if not weAreAtHome and heating then
+    if not weAreAtHome and heating == "Fűtés" then
         ujHomerseglet = ejszakaiHomerseglet;
+        log("Nem vagyunk otthon, takarékosság fűtésnél");
     end
 
     if (celHomerseglet < temperatureOutside / hatar) then
