@@ -25,7 +25,6 @@ local function log(str) if debug then fibaro:debug(str); end; end
 local function errorlog(str) fibaro:debug("<font color='red'>"..str.."</font>"); end
 local function infolog(str) fibaro:debug("<font color='yellow'>"..str.."</font>"); end
 
-
 --=================================================
 -- Main
 --=================================================
@@ -43,7 +42,7 @@ local timeTakenLastTooWindy = tonumber(os.difftime(os.time(), tooWindy));
 
 -- szeles az idő ha az elmúlt negyed órában volt nagy széllőkés
 local weatherWindy = ((timeTakenLastTooWindy <= (60 * 15)) or (wind >= minHighWind));
-local weatherCondition = api.get('/weather')['WeatherCondition']:lower(); 
+local weatherCondition = api.get('/weather')['WeatherCondition']:lower();
 local weatherCloudy = (weatherCondition == "cloudy");
 local weatherRain = (weatherCondition == "rain");
 
@@ -71,9 +70,9 @@ log ("needHeating: " .. tostring(needHeating));
 log ("needCooling: " .. tostring(needCooling));
 
 --roller shutter position
-local rollerShutterPositionDown = (tonumber(fibaro:getValue(13, "value")) == 0  or  
-    tonumber(fibaro:getValue(10, "value")) == 0  or  
-    tonumber(fibaro:getValue(16, "value")) == 0  or  
+local rollerShutterPositionDown = (tonumber(fibaro:getValue(13, "value")) == 0  or
+    tonumber(fibaro:getValue(10, "value")) == 0  or
+    tonumber(fibaro:getValue(16, "value")) == 0  or
     tonumber(fibaro:getValue(19, "value")) == 0
     )
 local rollerShutterPositionManualDown = (fibaro:getGlobalValue("NapellenzoStatus") == "Kézi le");
@@ -82,9 +81,9 @@ local rollerShutterPositionTempGuard = (fibaro:getGlobalValue("NapellenzoStatus"
 --napvédő középtályon
 local rollerShutterPositionHalfState = not rollerShutterPositionDown;
 if not rollerShutterPositionDown then
-    rollerShutterPositionHalfState = (tonumber(fibaro:getValue(13, "value")) < 99  or  
-    tonumber(fibaro:getValue(10, "value")) < 99  or  
-    tonumber(fibaro:getValue(16, "value")) < 99  or  
+    rollerShutterPositionHalfState = (tonumber(fibaro:getValue(13, "value")) < 99  or
+    tonumber(fibaro:getValue(10, "value")) < 99  or
+    tonumber(fibaro:getValue(16, "value")) < 99  or
     tonumber(fibaro:getValue(19, "value")) < 99
     )
 end
@@ -125,7 +124,7 @@ else
             infolog ("Target position Down - Evening Shade");
         end
     end
-    
+
     --Daylight options
     if ((dayLight == "Nappal")) then
         if (isHeating and not weAreAtHome and (not rollerShutterPositionManualDown)) then
@@ -150,26 +149,33 @@ else
         end
         if (targetRollerShutterPosition == "" and rollerShutterPositionManualUp) then
             targetRollerShutterPosition = "Up"
-            infolog ("Target position down - Roller Shutter Position Manual Up");
-        end       
+            infolog ("Target position Up - Roller Shutter Position Manual Up");
+        end
     end
-    
 end
 
 if (targetRollerShutterPosition == "Down") then
-    fibaro:startScene(51);
-    
-    if (not rollerShutterPositionManualDown) or (not rollerShutterPositionTempGuard) then
+    -- csak akkor ha nincs féltávon megállítva
+    if (not rollerShutterPositionManualDown) and (not rollerShutterPositionHalfState) then
+        fibaro:startScene(51);
+        infolog ('Le!');
+    else
+        infolog ('Félig van leeresztve, nem eresztjük le tovább!');
+    end
+
+    if (not rollerShutterPositionManualDown) and (not rollerShutterPositionTempGuard) then
         infolog ('Auto down!');
         fibaro:setGlobal("NapellenzoStatus", "Auto le");
-    else
-        infolog ('Le!');
     end
 else
-    fibaro:startScene(52);
+    if (not rollerShutterPositionManualUp) and (not rollerShutterPositionHalfState) then
+        fibaro:startScene(52);
+        infolog ('Fel!');
+    else
+        infolog ('Félig van leeresztve, nem huzzuk fel!');
+    end
+
     if (not rollerShutterPositionManualUp) then
         fibaro:setGlobal("NapellenzoStatus", "Auto fel");
-    else
-        infolog ('Fel!');
     end
 end

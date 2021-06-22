@@ -44,6 +44,10 @@ local napellenzokNemLent = (tonumber(fibaro:getValue(13, "value")) > 0  or
     tonumber(fibaro:getValue(19, "value")) > 0
     )
 log ("napellenzokNemLent: " .. tostring(napellenzokNemLent));
+log ("1: " .. tostring(tonumber(fibaro:getValue(13, "value"))));
+log ("2: " .. tostring(tonumber(fibaro:getValue(10, "value"))));
+log ("3: " .. tostring(tonumber(fibaro:getValue(16, "value"))));
+log ("4: " .. tostring(tonumber(fibaro:getValue(19, "value"))));
 
 if (napellenzokNemLent and weatherGoodCondition)
 then
