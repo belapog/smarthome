@@ -21,6 +21,21 @@ local function infolog(str) fibaro:debug("<font color='yellow'>"..str.."</font>"
 
 log("HomersegletAuto strated");
 
+------------------------------------------------------------------------
+--
+-- Dew point calculation using Magnus formula: http://en.wikipedia.org/wiki/Dew_point
+-- 
+-- http://forum.micasaverde.com/index.php?topic=37464.0
+--
+function DewPoint (T, RH)
+    -- a,b,c taken from a 1980 paper by David Bolton in the Monthly Weather Review
+    --  local a = 6.112     -- a is not used in this approximation
+    local b,c = 17.67, 243.5;
+    RH = math.max (RH or 0, 1e-3);
+    local gamma = math.log (RH/100) + b * T / (c + T);
+    return c * gamma / (b - gamma);
+end
+
 function TempHomersegletAuto()
     local celHomerseglet = tonumber(fibaro:getGlobalValue("CelHomerseglet"));
     local heating = fibaro:getGlobalValue("Futes");
@@ -32,6 +47,7 @@ function TempHomersegletAuto()
     local aktualisCelhomerseglet = tonumber(fibaro:getValue(66, "targetLevel"));
     local currentDate = os.date("*t");
     local weekend = false;
+    local dewPoint = DewPoint (tonumber(fibaro:getValue(67, "value")), tonumber(fibaro:getValue(140, "value")));
 
     local ejszakaiHomerseglet = 20.0;
     local ujHomerseglet = 23.5;
@@ -49,17 +65,18 @@ function TempHomersegletAuto()
     log("weekend: " .. tostring(weekend));
     log("weAreAtHome: " .. tostring(weAreAtHome));
     log("heating: " .. tostring(heating));
+    log("dewPoint: " .. tostring(dewPoint));
     
     ujHomerseglet = celHomerseglet;
 
     if alvas and heating == "Fűtés" then
         ujHomerseglet = ejszakaiHomerseglet;
-        log("Éjszakai hőmérséglet fűtésnél");
+        infolog("Éjszakai hőmérséglet fűtésnél");
     end
 
     if not weAreAtHome and heating == "Fűtés" then
         ujHomerseglet = ejszakaiHomerseglet;
-        log("Nem vagyunk otthon, takarékosság fűtésnél");
+        infolog("Nem vagyunk otthon, takarékosság fűtésnél");
     end
 
     if (celHomerseglet < temperatureOutside / hatar) then
@@ -68,7 +85,7 @@ function TempHomersegletAuto()
         if (ujHomerseglet < aktualisCelhomerseglet) then
             fibaro:call(184, "sendDefinedPushNotification", "15");
         end
-        log("Túl meleg van kinn");
+        infolog("Túl meleg van kinn");
     end
 
     log("ujHomerseglet: " .. tostring(ujHomerseglet));

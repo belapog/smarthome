@@ -39,5 +39,6 @@ if (
     tonumber(fibaro:getValue(19, "sceneActivation")) == 26 )
 then
 	fibaro:setGlobal("NapellenzoStatus", "Kézi le");
-    infolog("Kézi fel");
+    fibaro:setGlobal("TooWindyTime", "1");
+    infolog("Kézi le");
 end
