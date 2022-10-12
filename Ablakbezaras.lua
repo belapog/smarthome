@@ -15,6 +15,7 @@ end
 function CloseTheWindowNotFunc()
     local currentDate = os.time();
     debug ("currentDate" .. tostring(currentDate));
+    local mobileDeviceId = fibaro:getGlobalValue("MobileDeviceId");
     
     if ((( tonumber(fibaro:getValue(177, "value")) > 0 ) or 
             ( tonumber(fibaro:getValue(178, "value")) > 0 ) or 
@@ -34,7 +35,7 @@ function CloseTheWindowNotFunc()
         if ((timeTakenLastNot >= (60 * 5)) and (tonumber(lastCloseTheWindowNot)  ~= 0))
         then
             debug ("Be kellene csukni az ablakot!");
-            fibaro:call(184, "sendDefinedPushNotification", "12");
+            fibaro:call(mobileDeviceId, "sendDefinedPushNotification", "12");
       		fibaro:setGlobal("CloseTheWindowNot", tostring(currentDate));
         end
     	if (tonumber(lastCloseTheWindowNot)  == 0)

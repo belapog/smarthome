@@ -20,11 +20,13 @@ local function errorlog(str) fibaro:debug("<font color='red'>"..str.."</font>");
 --=================================================
 log("Földrengés érzékelés elindítva");
 
+local mobileDeviceId = fibaro:getGlobalValue("MobileDeviceId");
+
 if (
     tonumber(fibaro:getValue(101, "value")) > 0  or
     tonumber(fibaro:getValue(25, "value")) > 0  or
     tonumber(fibaro:getValue(79, "value")) > 0)
 then
     errorlog("Földrengés!!!");
-    fibaro:call(184, "sendDefinedPushNotification", "8");
+    fibaro:call(mobileDeviceId, "sendDefinedPushNotification", "8");
 end

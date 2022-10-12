@@ -89,6 +89,7 @@ end
 Debug ("triggerDeviceType: " .. triggerDeviceType);
 
 local newAtHome = "";
+local mobileDeviceId = fibaro:getGlobalValue("MobileDeviceId");
 if (triggerDeviceType == "Door") then
     local doorState = tonumber(fibaro:getValue(57, "value"));
     Debug ("doorState: " .. tostring(doorState));

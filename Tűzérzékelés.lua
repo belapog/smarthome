@@ -19,11 +19,13 @@ local function errorlog(str) fibaro:debug("<font color='red'>"..str.."</font>");
 log ('Tűz van!');
 
 local startSource = fibaro:getSourceTrigger();
+local mobileDeviceId = fibaro:getGlobalValue("MobileDeviceId");
+
 if (
     ( tonumber(fibaro:getValue(181, "value")) > 0 )
     or startSource["type"] == "other"
 )
 then
     log ('Tűz van!');
-	fibaro:call(184, "sendDefinedPushNotification", "13");
+	fibaro:call(mobileDeviceId, "sendDefinedPushNotification", "13");
 end
