@@ -71,10 +71,12 @@ local alarmReady = (
     (tonumber(fibaro:getValue(175, "value")) == 0) );
 Debug ("alarmReady: " .. tostring(alarmReady));
 
-
---Mi triggerelte az eseményt /ajtó vagy mozgás érzékelő/
 local trigger = fibaro:getSourceTrigger();
 local triggerDeviceType;
+local newAtHome = "";
+local mobileDeviceId = fibaro:getGlobalValue("MobileDeviceId");
+
+--Mi triggerelte az eseményt /ajtó vagy mozgás érzékelő/
 if (trigger['type'] == 'property') then
     local triggerDeviceId = trigger['deviceID'];
     Debug ("triggerDeviceId: " .. triggerDeviceId);
@@ -88,8 +90,6 @@ else
 end
 Debug ("triggerDeviceType: " .. triggerDeviceType);
 
-local newAtHome = "";
-local mobileDeviceId = fibaro:getGlobalValue("MobileDeviceId");
 if (triggerDeviceType == "Door") then
     local doorState = tonumber(fibaro:getValue(57, "value"));
     Debug ("doorState: " .. tostring(doorState));
@@ -103,7 +103,7 @@ if (triggerDeviceType == "Door") then
         end
         --Ha ablak vagy ajtó nyitva akkor üzenet
         if (not alarmReady) then
-            fibaro:call(184, "sendDefinedPushNotification", "7");
+            fibaro:call(mobileDeviceId, "sendDefinedPushNotification", "7");
             Debug("Valamelyik ablak nyitva van");
         end
     end

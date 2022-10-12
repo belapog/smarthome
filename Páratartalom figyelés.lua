@@ -21,18 +21,19 @@ log("Páratartalom figyelés strated");
 
 local paratartalom = tonumber(fibaro:getValue(140, "value"));
 log ("páratartalom: " .. tostring(paratartalom));
+local mobileDeviceId = fibaro:getGlobalValue("MobileDeviceId");
 
 --Páratartalom figyelmeztetések
 if ((paratartalom > 70 ))
 then
 		log("Nagy a páratartalom!", 2);
-		fibaro:call(184, "sendDefinedPushNotification", "10");
+		fibaro:call(mobileDeviceId, "sendDefinedPushNotification", "10");
 end
 
 if (( paratartalom < 30 ))
 then
 		log("Alacsony a páratartalom!", 2);
-		fibaro:call(184, "sendDefinedPushNotification", "11");
+		fibaro:call(mobileDeviceId, "sendDefinedPushNotification", "11");
 end
 
 --Napi statisztika

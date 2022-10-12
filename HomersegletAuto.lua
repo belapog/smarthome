@@ -13,6 +13,7 @@ local debug = true
 local function log(str) if debug then fibaro:debug(str); end; end
 local function errorlog(str) fibaro:debug("<font color='red'>"..str.."</font>"); end
 local function infolog(str) fibaro:debug("<font color='yellow'>"..str.."</font>"); end
+local mobileDeviceId = fibaro:getGlobalValue("MobileDeviceId");
 
 
 --=================================================
@@ -83,7 +84,7 @@ function TempHomersegletAuto()
         --felszabályozás ha túl meleg van
         ujHomerseglet = (temperatureOutside / hatar);
         if (ujHomerseglet < aktualisCelhomerseglet) then
-            fibaro:call(184, "sendDefinedPushNotification", "15");
+            fibaro:call(mobileDeviceId, "sendDefinedPushNotification", "15");
         end
         infolog("Túl meleg van kinn");
     end

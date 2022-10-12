@@ -40,6 +40,8 @@ log ("alarmReady: " .. tostring(alarmReady));
 local secured = (tonumber(fibaro:getValue(124, "secured")) == 255 );
 log ("secured: " .. tostring(secured));
 
+local mobileDeviceId = fibaro:getGlobalValue("MobileDeviceId");
+
 --Automata riasztás esete (nincsenek otthon)
 if ((triggerType == "global") and (atHome == "Nincsenek") and alarmReady and (autoRiaszto == "Igen")) then
     fibaro:call(124, "secure");
@@ -80,6 +82,6 @@ if (alarmReady and secured) then
 end
 
 if (not alarmReady and secured) then 
-    fibaro:call(184, "sendDefinedPushNotification", "7");
+    fibaro:call(mobileDeviceId, "sendDefinedPushNotification", "7");
     log("Riaszto nem aktiválható, valamelyik ablak nyitva van");
 end
