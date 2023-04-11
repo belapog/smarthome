@@ -30,14 +30,23 @@ function TimerFunc()
 
     -- Redönyök fel reggel ha nincs otthon senki
     local morningTime = 8 * 60;
-    local weAreAtHome = ((fibaro:getGlobalValue("OtthonVannak") == "Igen") or (fibaro:getGlobalValue("OtthonVannak") == "Talán"));
+    local midday = 12 * 60;
+    local weAreAtHome = (fibaro:getGlobalValue("OtthonVannak") == "Igen");
     local sleepMode = fibaro:getGlobalValue("Alvas");
 
     log ("weAreAtHome: " .. tostring(weAreAtHome));
-    if ((current == morningTime) and not weAreAtHome and sleepMode == "Alvás") then
+
+    if ((current == morningTime) and not weAreAtHome and (sleepMode == "Alvás")) then
         fibaro:gsetGlobalValue("Alvas", "Ébrenlét");
-        infolog("Ébrenétre kapcsolás");
+        infolog("Ébrenétre kapcsolás nincs itthon senki");
     end
+
+    if ((current == midday) and weAreAtHome and (sleepMode == "Alvás")) then
+        fibaro:gsetGlobalValue("Alvas", "Ébrenlét");
+        infolog("Ébrenétre kapcsolás itthon van valaki");
+    end
+
+
     setTimeout(TimerFunc, 60*1000);
 end
 

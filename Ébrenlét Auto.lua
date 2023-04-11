@@ -28,5 +28,5 @@ if (
 )
 then
     infolog ("Ébrenlét);
-	fibaro:setGlobal("Alvas", "Ébrenlét");
+    fibaro:setGlobal("Alvas", "Ébrenlét");
 end
