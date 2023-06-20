@@ -37,12 +37,12 @@ function TimerFunc()
     log ("weAreAtHome: " .. tostring(weAreAtHome));
 
     if ((current == morningTime) and not weAreAtHome and (sleepMode == "Alvás")) then
-        fibaro:gsetGlobalValue("Alvas", "Ébrenlét");
+        fibaro:setGlobal("Alvas", "Ébrenlét");
         infolog("Ébrenétre kapcsolás nincs itthon senki");
     end
 
     if ((current == midday) and weAreAtHome and (sleepMode == "Alvás")) then
-        fibaro:gsetGlobalValue("Alvas", "Ébrenlét");
+        fibaro:setGlobal("Alvas", "Ébrenlét");
         infolog("Ébrenétre kapcsolás itthon van valaki");
     end
 
