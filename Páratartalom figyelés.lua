@@ -26,14 +26,14 @@ local mobileDeviceId = fibaro:getGlobalValue("MobileDeviceId");
 --Páratartalom figyelmeztetések
 if ((paratartalom > 70 ))
 then
-		log("Nagy a páratartalom!", 2);
-		fibaro:call(mobileDeviceId, "sendDefinedPushNotification", "10");
+  infolog("Nagy a páratartalom!");
+	fibaro:call(mobileDeviceId, "sendDefinedPushNotification", "10");
 end
 
 if (( paratartalom < 30 ))
 then
-		log("Alacsony a páratartalom!", 2);
-		fibaro:call(mobileDeviceId, "sendDefinedPushNotification", "11");
+  infolog("Alacsony a páratartalom!");
+	fibaro:call(mobileDeviceId, "sendDefinedPushNotification", "11");
 end
 
 --Napi statisztika

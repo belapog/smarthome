@@ -78,10 +78,10 @@ if (alarmReady and secured) then
     if (atHome ~= "Nincsenek") then
         fibaro:setGlobal("OtthonVannak", "Nincsenek");
     end
-    log("Riaszto aktiválva", 2);
+    infolog("Riaszto aktiválva");
 end
 
 if (not alarmReady and secured) then 
     fibaro:call(mobileDeviceId, "sendDefinedPushNotification", "7");
-    log("Riaszto nem aktiválható, valamelyik ablak nyitva van");
+    infolog("Riaszto nem aktiválható, valamelyik ablak nyitva van");
 end
