@@ -35,6 +35,7 @@ function TimerFunc()
     local sleepMode = fibaro:getGlobalValue("Alvas");
 
     log ("weAreAtHome: " .. tostring(weAreAtHome));
+    log ("sleepMode: " .. tostring(sleepMode));
 
     if ((current == morningTime) and not weAreAtHome and (sleepMode == "Alvás")) then
         fibaro:setGlobal("Alvas", "Ébrenlét");

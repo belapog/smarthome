@@ -71,7 +71,7 @@ log ("needCooling: " .. tostring(needCooling));
 
 --roller shutter position
 local rollerShutterPositionDown = (tonumber(fibaro:getValue(13, "value")) == 0  or
-    tonumber(fibaro:getValue(10, "value")) == 0  or
+    --tonumber(fibaro:getValue(10, "value")) == 0  or
     tonumber(fibaro:getValue(16, "value")) == 0  or
     tonumber(fibaro:getValue(19, "value")) == 0
     )
@@ -82,7 +82,7 @@ local rollerShutterPositionTempGuard = (fibaro:getGlobalValue("NapellenzoStatus"
 local rollerShutterPositionHalfState = not rollerShutterPositionDown;
 if not rollerShutterPositionDown then
     rollerShutterPositionHalfState = (tonumber(fibaro:getValue(13, "value")) < 99  or
-    tonumber(fibaro:getValue(10, "value")) < 99  or
+    --tonumber(fibaro:getValue(10, "value")) < 99  or
     tonumber(fibaro:getValue(16, "value")) < 99  or
     tonumber(fibaro:getValue(19, "value")) < 99
     )

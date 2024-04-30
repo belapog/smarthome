@@ -2,11 +2,26 @@
 %% autostart
 --]]
 
+-- Common functions
+--=================================================
+local debug = true
+local function log(str) if debug then fibaro:debug(str); end; end
+local function errorlog(str) fibaro:debug("<font color='red'>"..str.."</font>"); end
+local function infolog(str) fibaro:debug("<font color='yellow'>"..str.."</font>"); end
+
+--=================================================
+-- Main
+--=================================================
+
 function DailyCleanUpFunc()
     local currentDate = os.date("*t");
+
+    log ("DailyCleanUpFunc started: " .. tostring(currentDate));
             
     if (string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) == "00:00")
     then
+
+      log ("Éjfél van");
 
       local minTem = fibaro:getGlobal("StatDailyMaxTemp2");
       local maxTemp = fibaro:getGlobal("StatDailyMinTemp2");
