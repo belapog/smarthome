@@ -5,12 +5,13 @@
 %% events
 %% globals
 Alvas
+OtthonVannak
 --]]
 
 --=================================================
 -- Common functions
 --=================================================
-local debug = true
+local debug = false
 local function log(str) if debug then fibaro:debug(str); end; end
 local function errorlog(str) fibaro:debug("<font color='red'>"..str.."</font>"); end
 local function infolog(str) fibaro:debug("<font color='yellow'>"..str.."</font>"); end
@@ -22,10 +23,18 @@ log("Páratartalanítás strated");
 local paratartalom = tonumber(fibaro:getValue(140, "value"));
 log ("páratartalom: " .. tostring(paratartalom));
 
+local alvas = fibaro:getGlobalValue("Alvas");
+log ("alvas: " .. tostring(alvas));
+local otthonVannak = fibaro:getGlobalValue("OtthonVannak");
+log ("otthonVannak: " .. tostring(otthonVannak));
+
 if (
  ( paratartalom > 60 )
 and
- ( fibaro:getGlobalValue("Alvas") == "Ébrenlét" )
+ ( alvas == "Ébrenlét" )
+and 
+ ( otthonVannak == "Nincsenek" )
+
 )
 then
     log("Páratartalanítás be");
@@ -35,7 +44,9 @@ end
 if (
  ( paratartalom < 55 )
 or
- ( fibaro:getGlobalValue("Alvas") == "Alvás" )
+ ( alvas == "Alvás" )
+or 
+ ( otthonVannak == "Igen" )
 )
 then
     log("Páratartalanítás ki");
